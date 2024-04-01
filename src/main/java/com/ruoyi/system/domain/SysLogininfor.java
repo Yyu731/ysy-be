@@ -1,6 +1,8 @@
 package com.ruoyi.system.domain;
 
+import com.baomidou.mybatisplus.annotation.FieldFill;
 import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.ruoyi.common.annotation.Excel;
@@ -15,7 +17,7 @@ import java.util.Date;
  * 
  * @author ruoyi
  */
-public class SysLogininfor extends BaseEntity
+public class SysLogininfor
 {
     private static final long serialVersionUID = 1L;
 
@@ -55,6 +57,7 @@ public class SysLogininfor extends BaseEntity
     /** 访问时间 */
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     @Excel(name = "访问时间", width = 30, dateFormat = "yyyy-MM-dd HH:mm:ss")
+    @TableField(fill = FieldFill.INSERT)
     private Date loginTime;
 
     public Long getInfoId()

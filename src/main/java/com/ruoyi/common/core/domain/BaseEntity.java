@@ -1,5 +1,6 @@
 package com.ruoyi.common.core.domain;
 
+import com.baomidou.mybatisplus.annotation.FieldFill;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.fasterxml.jackson.annotation.JsonFormat;
@@ -22,7 +23,7 @@ public class BaseEntity implements Serializable
 
     /** 搜索值 */
     @JsonIgnore
-    @TableField(select = false)
+    @TableField(exist = false)
     private String searchValue;
 
     /** 创建者 */
@@ -30,6 +31,7 @@ public class BaseEntity implements Serializable
 
     /** 创建时间 */
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    @TableField(fill = FieldFill.INSERT)
     private Date createTime;
 
     /** 更新者 */
@@ -37,6 +39,7 @@ public class BaseEntity implements Serializable
 
     /** 更新时间 */
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    @TableField(fill = FieldFill.INSERT_UPDATE)
     private Date updateTime;
 
     /** 备注 */

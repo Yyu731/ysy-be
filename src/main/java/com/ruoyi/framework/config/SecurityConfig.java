@@ -116,7 +116,9 @@ public class SecurityConfig {
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 // 过滤请求
                 .authorizeHttpRequests(
-                        auth -> auth.requestMatchers(HttpMethod.GET, "/", "/*.html", "/**.html", "/**.css", "/**.js", "/profile/**").permitAll()
+                        auth -> auth
+                                .requestMatchers("/login", "/register", "/captchaImage").permitAll()
+                                .requestMatchers(HttpMethod.GET, "/", "/*.html", "/**.html", "/**.css", "/**.js", "/profile/**").permitAll()
                                 .requestMatchers("/swagger-ui.html", "/swagger-resources/**", "/webjars/**", "/*/api-docs", "/druid/**").permitAll()
                                 .anyRequest().authenticated()
                 )
@@ -133,10 +135,10 @@ public class SecurityConfig {
 
     }
 
-    @Bean
-    public WebSecurityCustomizer webSecurityCustomizer() {
-        return web-> web.ignoring().requestMatchers("/login", "/register", "/captchaImage");
-    }
+//    @Bean
+//    public WebSecurityCustomizer webSecurityCustomizer() {
+//        return web-> web.ignoring().requestMatchers(");
+//    }
 
     /**
      * 强散列哈希加密实现

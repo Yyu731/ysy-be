@@ -1,6 +1,8 @@
 package com.ruoyi.system.domain;
 
+import com.baomidou.mybatisplus.annotation.FieldFill;
 import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.ruoyi.common.annotation.Excel;
@@ -14,7 +16,7 @@ import java.util.Date;
  * 
  * @author ruoyi
  */
-public class SysOperLog extends BaseEntity
+public class SysOperLog
 {
     private static final long serialVersionUID = 1L;
 
@@ -85,6 +87,7 @@ public class SysOperLog extends BaseEntity
     /** 操作时间 */
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     @Excel(name = "操作时间", width = 30, dateFormat = "yyyy-MM-dd HH:mm:ss")
+    @TableField(fill = FieldFill.INSERT)
     private Date operTime;
 
     /** 消耗时间 */
