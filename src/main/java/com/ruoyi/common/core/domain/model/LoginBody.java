@@ -1,5 +1,7 @@
 package com.ruoyi.common.core.domain.model;
 
+import io.swagger.annotations.ApiModelProperty;
+
 /**
  * 用户登录对象
  * 
@@ -16,6 +18,11 @@ public class LoginBody
      * 用户密码
      */
     private String password;
+
+    /**
+     *
+     */
+    private String wxCode;
 
     /**
      * 验证码
@@ -35,6 +42,14 @@ public class LoginBody
     public void setUsername(String username)
     {
         this.username = username;
+    }
+
+    public String getWxCode() {
+        return wxCode;
+    }
+
+    public void setWxCode(String wxCode) {
+        this.wxCode = wxCode;
     }
 
     public String getPassword()

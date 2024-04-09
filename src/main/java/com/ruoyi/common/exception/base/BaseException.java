@@ -57,7 +57,7 @@ public class BaseException extends RuntimeException
 
     public BaseException(String defaultMessage)
     {
-        this(null, null, null, defaultMessage);
+        this(null, "500", null, defaultMessage);
     }
 
     @Override

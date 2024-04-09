@@ -16,6 +16,7 @@ import com.ruoyi.common.utils.ip.IpUtils;
 import com.ruoyi.framework.manager.AsyncManager;
 import com.ruoyi.framework.manager.factory.AsyncFactory;
 import com.ruoyi.framework.security.context.AuthenticationContextHolder;
+import com.ruoyi.framework.security.token.WechatAuthenticationToken;
 import com.ruoyi.system.service.ISysConfigService;
 import com.ruoyi.system.service.ISysUserService;
 import jakarta.annotation.Resource;
@@ -65,7 +66,7 @@ public class SysLoginService
         // 验证码校验
         validateCaptcha(username, code, uuid);
         // 登录前置校验
-        loginPreCheck(username, password);
+//        loginPreCheck(username, password);
         // 用户验证
         Authentication authentication = null;
         try
@@ -91,6 +92,46 @@ public class SysLoginService
         UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(loginUser, null, loginUser.getAuthorities());
         SecurityContextHolder.getContext().setAuthentication(authenticationToken);
         AsyncManager.me().execute(AsyncFactory.recordLogininfor(username, Constants.LOGIN_SUCCESS, MessageUtils.message("user.login.success")));
+        recordLoginInfo(loginUser.getUserId());
+        // 生成token
+        return tokenService.createToken(loginUser);
+    }
+
+
+    /**
+     * 登录验证
+     *
+     * @param wxCode 登录临时凭证
+     * @return 结果
+     */
+    public String wxLogin(String wxCode)
+    {
+        // 登录前置校验
+//        loginPreCheck(username, password);
+        // 用户验证
+        Authentication authentication = null;
+        try
+        {
+            WechatAuthenticationToken authenticationToken = WechatAuthenticationToken.unauthenticated(wxCode, wxCode);
+            authentication = authenticationManager.authenticate(authenticationToken);
+        }
+        catch (Exception e)
+        {
+            if (e instanceof BadCredentialsException)
+            {
+                AsyncManager.me().execute(AsyncFactory.recordLogininfor(wxCode, Constants.LOGIN_FAIL, MessageUtils.message("user.password.not.match")));
+                throw new UserPasswordNotMatchException();
+            }
+            else
+            {
+                AsyncManager.me().execute(AsyncFactory.recordLogininfor(wxCode, Constants.LOGIN_FAIL, e.getMessage()));
+                throw new ServiceException(e.getMessage());
+            }
+        }
+        LoginUser loginUser = (LoginUser) authentication.getPrincipal();
+        WechatAuthenticationToken authenticationToken = new WechatAuthenticationToken(loginUser.getOpenId(), loginUser, loginUser.getAuthorities());
+        SecurityContextHolder.getContext().setAuthentication(authenticationToken);
+        AsyncManager.me().execute(AsyncFactory.recordLogininfor(wxCode, Constants.LOGIN_SUCCESS, MessageUtils.message("user.login.success")));
         recordLoginInfo(loginUser.getUserId());
         // 生成token
         return tokenService.createToken(loginUser);

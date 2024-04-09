@@ -2,6 +2,7 @@ package com.ruoyi.system.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.ruoyi.common.core.domain.entity.SysUser;
+import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.List;
 
@@ -149,4 +150,8 @@ public interface ISysUserService extends IService<SysUser>
      * @return 结果
      */
     public String importUser(List<SysUser> userList, Boolean isUpdateSupport, String operName);
+
+    SysUser getByOpenid(String openId);
+
+    UserDetails loginByOpenId(String code);
 }

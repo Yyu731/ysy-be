@@ -22,6 +22,8 @@ public class LoginUser implements UserDetails
      */
     private Long userId;
 
+    private String openId;
+
     /**
      * 部门ID
      */
@@ -97,6 +99,14 @@ public class LoginUser implements UserDetails
     public void setUserId(Long userId)
     {
         this.userId = userId;
+    }
+
+    public String getOpenId() {
+        return openId;
+    }
+
+    public void setOpenId(String openId) {
+        this.openId = openId;
     }
 
     public Long getDeptId()

@@ -10,6 +10,9 @@ import com.ruoyi.common.xss.Xss;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.With;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
@@ -21,6 +24,8 @@ import java.util.List;
  * 
  * @author ruoyi
  */
+@Builder
+@AllArgsConstructor
 public class SysUser extends BaseEntity
 {
     private static final long serialVersionUID = 1L;
@@ -37,6 +42,11 @@ public class SysUser extends BaseEntity
     /** 用户昵称 */
     @Excel(name = "用户名称")
     private String nickName;
+
+    /**
+     * OpenID
+     */
+    private String openId;
 
     /** 用户邮箱 */
     @Excel(name = "用户邮箱")
@@ -125,6 +135,14 @@ public class SysUser extends BaseEntity
     public void setUserName(String userName)
     {
         this.userName = userName;
+    }
+
+    public String getOpenId() {
+        return openId;
+    }
+
+    public void setOpenId(String openId) {
+        this.openId = openId;
     }
 
     @Email(message = "邮箱格式不正确")

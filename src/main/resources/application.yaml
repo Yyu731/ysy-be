@@ -15,9 +15,16 @@ ysy:
   # 验证码类型 math 数字计算 char 字符验证
   captchaType: math
 
+  # 微信
+wechat:
+    # 小程序ID
+  appId: wx2339861e6c1002c8
+    # 小程序密钥
+  appSecret: 2dd64478b0d44fe3f149738f1809c756
+
 # 开发环境配置
 server:
-  # 服务器的HTTP端口，默认为8080
+  # 服务器的HTTP端口，默认为80
   port: 80
   servlet:
     # 应用的访问路径
