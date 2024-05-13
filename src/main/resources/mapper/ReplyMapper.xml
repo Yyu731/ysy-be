@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.mapper.ReplyMapper">
+
+    <resultMap id="BaseResultMap" type="com.ruoyi.domain.Reply">
+            <id property="replyId" column="reply_id" jdbcType="INTEGER"/>
+            <result property="replierId" column="replier_id" jdbcType="BIGINT"/>
+            <result property="postId" column="post_id" jdbcType="INTEGER"/>
+            <result property="replyContent" column="reply_content" jdbcType="VARCHAR"/>
+            <result property="replyTime" column="reply_time" jdbcType="TIMESTAMP"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        reply_id,replier_id,post_id,
+        reply_content,reply_time
+    </sql>
+</mapper>
