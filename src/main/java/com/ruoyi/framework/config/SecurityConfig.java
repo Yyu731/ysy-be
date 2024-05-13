@@ -115,11 +115,12 @@ public class SecurityConfig {
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 // 过滤请求
                 .authorizeHttpRequests(
-                        auth -> auth
-                                .requestMatchers("/login","wx-login", "/register", "/captchaImage").permitAll()
-                                .requestMatchers(HttpMethod.GET, "/", "/*.html", "/**.html", "/**.css", "/**.js", "/profile/**").permitAll()
-                                .requestMatchers("/swagger-ui.html", "/swagger-resources/**", "/webjars/**", "/*/api-docs", "/druid/**").permitAll()
-                                .anyRequest().authenticated()
+//                        auth -> auth
+//                                .requestMatchers("/login","wx-login", "/register", "/captchaImage").permitAll()
+//                                .requestMatchers(HttpMethod.GET, "/", "/*.html", "/**.html", "/**.css", "/**.js", "/profile/**").permitAll()
+//                                .requestMatchers("/swagger-ui.html", "/swagger-resources/**", "/webjars/**", "/*/api-docs", "/druid/**").permitAll()
+//                                .anyRequest().authenticated()
+                        auth -> auth.anyRequest().permitAll()
                 )
                 .headers(header -> header.frameOptions(HeadersConfigurer.FrameOptionsConfig::disable));
         // 添加Logout filter

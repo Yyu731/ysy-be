@@ -14,6 +14,7 @@ import lombok.Data;
 @TableName(value ="school_type")
 @Data
 public class SchoolType implements Serializable {
+    @TableId
     private Integer schoolTypeId;
 
     private String typeName;

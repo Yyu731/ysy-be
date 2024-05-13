@@ -14,6 +14,7 @@ import lombok.Data;
 @TableName(value ="school_province")
 @Data
 public class SchoolProvince implements Serializable {
+    @TableId
     private Integer regionId;
 
     private String regionName;

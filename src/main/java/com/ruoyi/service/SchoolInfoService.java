@@ -2,6 +2,9 @@ package com.ruoyi.service;
 
 import com.ruoyi.domain.SchoolInfo;
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.ruoyi.domain.vo.BriefSchoolVo;
+
+import java.util.List;
 
 /**
 * @author ASUS
@@ -10,4 +13,5 @@ import com.baomidou.mybatisplus.extension.service.IService;
 */
 public interface SchoolInfoService extends IService<SchoolInfo> {
 
+    List<BriefSchoolVo> getBriefSchoolList(List<SchoolInfo> schoolInfList);
 }
