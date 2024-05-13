@@ -24,8 +24,18 @@ public class SchoolController extends BaseController {
     public TableDataInfo list()
     {
         Page<SchoolInfo> page = getPage();
+        System.out.println(page.toString());
         schoolInfoService.page(page);
+        //10条记录里
         List<SchoolInfo> records = page.getRecords();
+
+        int num=0;
+        for (SchoolInfo schoolInfo:records){
+            num++;
+            System.out.println("aaa"+num);
+            System.out.println(schoolInfo.getSchoolName());
+
+        }
         List<BriefSchoolVo> briefSchoolVoList = schoolInfoService.getBriefSchoolList(records);
         return getDataTable(briefSchoolVoList);
     }

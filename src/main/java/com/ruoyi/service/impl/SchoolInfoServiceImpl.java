@@ -38,23 +38,29 @@ public class SchoolInfoServiceImpl extends ServiceImpl<SchoolInfoMapper, SchoolI
     public List<BriefSchoolVo> getBriefSchoolList(List<SchoolInfo> schoolInfList) {
 
         List<BriefSchoolVo> briefSchoolVos = new ArrayList<>();
-
+        int num=0;
         for (SchoolInfo schoolInfo : schoolInfList) {
-            BriefSchoolVo briefSchoolVo = new BriefSchoolVo();
-            briefSchoolVo.setSchoolId(schoolInfo.getSchoolId());
-            briefSchoolVo.setSchoolName(schoolInfo.getSchoolName());
-            briefSchoolVo.setSchoolGate(schoolInfo.getSchoolGate());
-            briefSchoolVo.setProvince(schoolProvinceService.getById(schoolInfo.getProvinceId()).getRegionName());
-            briefSchoolVo.setSchoolType(schoolTypeService.getById(schoolInfo.getSchoolTypeId()).getTypeName());
-            briefSchoolVo.setFeatures(
-                    schoolLevelService.list(
-                            Wrappers.lambdaQuery(SchoolLevel.class)
-                                    .eq(SchoolLevel::getSchoolId, schoolInfo.getSchoolId()))
-                    .stream().map(item -> item.getFeatureName()).limit(3)
-                    .collect(Collectors.toList()));
-            briefSchoolVos.add(briefSchoolVo);
+            num++;
+            if(schoolInfo.getSchoolHot()==1) {
+                BriefSchoolVo briefSchoolVo = new BriefSchoolVo();
+                briefSchoolVo.setSchoolId(schoolInfo.getSchoolId());
+                briefSchoolVo.setSchoolName(schoolInfo.getSchoolName());
+                briefSchoolVo.setSchoolGate(schoolInfo.getSchoolGate());
+                briefSchoolVo.setProvince(schoolProvinceService.getById(schoolInfo.getProvinceId()).getRegionName());
+                briefSchoolVo.setSchoolType(schoolTypeService.getById(schoolInfo.getSchoolTypeId()).getTypeName());
+                briefSchoolVo.setFeatures(
+                        schoolLevelService.list(
+                                        Wrappers.lambdaQuery(SchoolLevel.class)
+                                                .eq(SchoolLevel::getSchoolId, schoolInfo.getSchoolId()))
+                                .stream().map(item -> item.getFeatureName()).limit(3)
+                                .collect(Collectors.toList()));
+                briefSchoolVos.add(briefSchoolVo);
+            }
+            System.out.println(num);
         }
-
+        for (BriefSchoolVo briefSchoolVo: briefSchoolVos){
+            System.out.println(briefSchoolVo.getSchoolName());
+        }
         return briefSchoolVos;
     }
 }
