@@ -3,6 +3,7 @@ package com.ruoyi.service;
 import com.ruoyi.domain.SchoolInfo;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.ruoyi.domain.vo.BriefSchoolVo;
+import com.ruoyi.domain.vo.TotalSchoolVo;
 
 import java.util.List;
 
@@ -14,4 +15,5 @@ import java.util.List;
 public interface SchoolInfoService extends IService<SchoolInfo> {
 
     List<BriefSchoolVo> getBriefSchoolList(List<SchoolInfo> schoolInfList);
+    List<TotalSchoolVo> getTotalSchoolList(List<SchoolInfo> schoolInfList);
 }
