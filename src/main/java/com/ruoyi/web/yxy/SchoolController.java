@@ -1,9 +1,11 @@
 package com.ruoyi.web.yxy;
 
+import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.ruoyi.common.core.controller.BaseController;
 import com.ruoyi.common.core.page.TableDataInfo;
 import com.ruoyi.domain.SchoolInfo;
+import com.ruoyi.domain.SchoolLevel;
 import com.ruoyi.domain.vo.BriefSchoolVo;
 import com.ruoyi.domain.vo.TotalSchoolVo;
 import com.ruoyi.service.SchoolInfoService;
@@ -26,17 +28,11 @@ public class SchoolController extends BaseController {
     {
         Page<SchoolInfo> page = getPage();
         System.out.println(page.toString());
-        schoolInfoService.page(page);
+        schoolInfoService.page(page,Wrappers.lambdaQuery(SchoolInfo.class)
+                .eq(SchoolInfo::getSchoolHot,1 ));
+
         //10条记录里
         List<SchoolInfo> records = page.getRecords();
-
-        int num=0;
-        for (SchoolInfo schoolInfo:records){
-            num++;
-            System.out.println("aaa"+num);
-            System.out.println(schoolInfo.getSchoolName());
-
-        }
         List<BriefSchoolVo> briefSchoolVoList = schoolInfoService.getBriefSchoolList(records);
         return getDataTable(briefSchoolVoList);
     }
@@ -48,6 +44,7 @@ public class SchoolController extends BaseController {
         schoolInfoService.page(page);
         //10条记录里
         List<SchoolInfo> records = page.getRecords();
+
         List<TotalSchoolVo> totalSchoolVoList = schoolInfoService.getTotalSchoolList(records);
         return getDataTable(totalSchoolVoList);
     }

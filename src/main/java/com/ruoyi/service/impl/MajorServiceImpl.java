@@ -32,24 +32,17 @@ public class MajorServiceImpl extends ServiceImpl<MajorMapper, Major>
                 totalMajorVo.setMajorId(major.getMajorId());
                 totalMajorVo.setMajorName(major.getMajorName());
                 totalMajorVo.setMajorCode(major.getMajorCode());
-                String degreeName=major.getDegreeName();
+                totalMajorVo.setDegreeName(major.getDegreeName());
                 Major subDiscipline = majors.stream()
                         .filter(m -> m.getMajorId().equals(major.getParentMajorId()))
                         .findFirst()
                         .orElse(null);
-
-                if (subDiscipline != null) {
-                    totalMajorVo.setSubjectAttribute(subDiscipline.getMajorName());
-                    Major firstLevelDiscipline=majors.stream()
-                            .filter(m -> m.getMajorId().equals(subDiscipline.getParentMajorId()))
-                            .findFirst()
-                            .orElse(null);
-                    if (firstLevelDiscipline!=null){
-                        totalMajorVo.setSubjectAttribute(degreeName+'-'+firstLevelDiscipline.getMajorName()+'-'+subDiscipline.getMajorName());
-                    }
-                } else {
-                    totalMajorVo.setSubjectAttribute(degreeName); // 处理未找到对应 Major 对象的情况
-                }
+                totalMajorVo.setSubDiscipline(subDiscipline.getMajorName());
+                Major firstLevelDiscipline=majors.stream()
+                        .filter(m -> m.getMajorId().equals(subDiscipline.getParentMajorId()))
+                        .findFirst()
+                        .orElse(null);
+                totalMajorVo.setFirstLevelDiscipline(firstLevelDiscipline.getMajorName());
                 totalMajorVos.add(totalMajorVo);
             }
         }
