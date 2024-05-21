@@ -7,6 +7,7 @@ import com.ruoyi.domain.SchoolLevel;
 import com.ruoyi.domain.SchoolMajor;
 import com.ruoyi.domain.vo.BriefSchoolVo;
 import com.ruoyi.domain.vo.HotSchoolMajorVo;
+import com.ruoyi.service.SchoolInfoService;
 import com.ruoyi.service.SchoolMajorService;
 import com.ruoyi.mapper.SchoolMajorMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,30 +25,22 @@ import java.util.stream.Collectors;
 @Service
 public class SchoolMajorServiceImpl extends ServiceImpl<SchoolMajorMapper, SchoolMajor>
     implements SchoolMajorService{
+    @Autowired
+    private SchoolInfoService schoolInfoService;
     @Override
-    public List<HotSchoolMajorVo> getHotSchoolMajorVoList(List<SchoolInfo> schoolInfList){
+    public List<HotSchoolMajorVo> getHotSchoolMajorVoList(List<SchoolMajor> schoolMajorList){
         List<HotSchoolMajorVo> hotSchoolMajorVos = new ArrayList<>();
-        for (SchoolInfo schoolInfo : schoolInfList) {
-//            if(schoolInfo.getSchoolHot()==1) {
-                HotSchoolMajorVo hotSchoolMajorVo = new HotSchoolMajorVo();
-            hotSchoolMajorVo.setSchoolId(schoolInfo.getSchoolId());
-            hotSchoolMajorVo.setSchoolName(schoolInfo.getSchoolName());
-            hotSchoolMajorVo.setSchoolBadge(schoolInfo.getSchoolGate());
-//            hotSchoolMajorVo.setMajorName(
-//                    Wrappers.lambdaQuery(SchoolMajor.class)
-//                            .equals(S)
-//            );
-//            hotSchoolMajorVo.
-//                h.setFeatures(
-//                        schoolLevelService.list(
-//                                        Wrappers.lambdaQuery(SchoolLevel.class)
-//                                                .in(SchoolLevel::getSchoolFeatureId, 1,2,3,4)
-//                                                .eq(SchoolLevel::getSchoolId, schoolInfo.getSchoolId()))
-//                                .stream().map(item -> item.getFeatureName()).limit(3)
-//                                .collect(Collectors.toList()));
-//                hotSchoolMajorVos.add(hotSchoolMajorVo);
-//            }
+        for (SchoolMajor schoolMajor : schoolMajorList) {
+            HotSchoolMajorVo hotSchoolMajorVo = new HotSchoolMajorVo();
+            hotSchoolMajorVo.setSchoolId(schoolMajor.getSchoolId());
+            hotSchoolMajorVo.setSchoolName(schoolMajor.getSchoolName());
+            hotSchoolMajorVo.setMajorName(schoolMajor.getMajorName());
+            hotSchoolMajorVo.setMajorId(schoolMajor.getMajorId());
+            SchoolInfo schoolInfo=schoolInfoService.getOne(Wrappers.lambdaQuery(SchoolInfo.class)
+                            .eq(SchoolInfo::getSchoolId,schoolMajor.getSchoolId()));
 
+            hotSchoolMajorVo.setSchoolBadge(schoolInfo.getSchoolBadge());
+            hotSchoolMajorVos.add(hotSchoolMajorVo);
         }
         return hotSchoolMajorVos;
     }

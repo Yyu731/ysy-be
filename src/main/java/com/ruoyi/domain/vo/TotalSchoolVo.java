@@ -18,7 +18,7 @@ public class TotalSchoolVo implements Serializable {
     private String schoolBadge;
 
     //高等院校/科研院所
-    private List<String> typeFeatures;
+    private String typeFeatures;
     //985/211/双一流/自划线
     private List<String> features;
 

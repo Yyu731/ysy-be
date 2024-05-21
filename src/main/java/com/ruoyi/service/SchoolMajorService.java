@@ -14,5 +14,5 @@ import java.util.List;
 * @createDate 2024-05-06 16:28:24
 */
 public interface SchoolMajorService extends IService<SchoolMajor> {
-    List<HotSchoolMajorVo> getHotSchoolMajorVoList(List<SchoolInfo> schoolInfList);
+    List<HotSchoolMajorVo> getHotSchoolMajorVoList(List<SchoolMajor> schoolMajorList);
 }

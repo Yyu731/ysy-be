@@ -14,7 +14,11 @@ public class TotalMajorVo implements Serializable {
     private String majorCode;
 
     //学位类型+一级学科+二级学科
-    private String subjectAttribute;
+    private String degreeName;
+
+    private String subDiscipline;
+
+    private String firstLevelDiscipline;
 
     private static final long serialVersionUID = 1L;
 }

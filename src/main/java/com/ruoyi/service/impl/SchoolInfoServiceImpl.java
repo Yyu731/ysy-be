@@ -67,7 +67,6 @@ public class SchoolInfoServiceImpl extends ServiceImpl<SchoolInfoMapper, SchoolI
     }
     @Override
     public List<TotalSchoolVo> getTotalSchoolList(List<SchoolInfo> schoolInfList) {
-
         List<TotalSchoolVo> totalSchoolVos = new ArrayList<>();
         for (SchoolInfo schoolInfo : schoolInfList) {
                 TotalSchoolVo totalSchoolVo = new TotalSchoolVo();
@@ -76,14 +75,13 @@ public class SchoolInfoServiceImpl extends ServiceImpl<SchoolInfoMapper, SchoolI
                 totalSchoolVo.setSchoolBadge(schoolInfo.getSchoolBadge());
                 totalSchoolVo.setProvince(schoolProvinceService.getById(schoolInfo.getProvinceId()).getRegionName());
                 totalSchoolVo.setSchoolType(schoolTypeService.getById(schoolInfo.getSchoolTypeId()).getTypeName());
-                totalSchoolVo.setTypeFeatures(schoolLevelService.list(
-                                Wrappers.lambdaQuery(SchoolLevel.class)
-                                        .in(SchoolLevel::getSchoolFeatureId, 5, 6) // 判断 SchoolFeatureId 是否为 5 或 6
-                                        .eq(SchoolLevel::getSchoolId, schoolInfo.getSchoolId())) // 判断 SchoolId 是否等于 schoolInfo 的 SchoolId
-                        .stream()
-                        .map(item -> item.getFeatureName())
-                        .collect(Collectors.toList()));
-
+            List<SchoolLevel> schoolLevel = schoolLevelService.list(Wrappers.<SchoolLevel>lambdaQuery()
+                    .in(SchoolLevel::getSchoolFeatureId, 5, 6)
+                    .eq(SchoolLevel::getSchoolId, schoolInfo.getSchoolId())
+            );
+            for (SchoolLevel schoolLevel1:schoolLevel) {
+                totalSchoolVo.setTypeFeatures(schoolLevel1.getFeatureName());
+            }
                 totalSchoolVo.setFeatures(
                         schoolLevelService.list(
                                         Wrappers.lambdaQuery(SchoolLevel.class)
