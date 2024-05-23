@@ -9,6 +9,7 @@ import com.ruoyi.common.core.domain.entity.SysUser;
 import com.ruoyi.common.core.domain.model.LoginUser;
 import com.ruoyi.common.exception.base.BaseException;
 import com.ruoyi.framework.security.token.WechatAuthenticationToken;
+import com.ruoyi.framework.web.service.UserDetailsServiceImpl;
 import com.ruoyi.system.service.ISysUserService;
 import com.ruoyi.system.service.WechatService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,6 +19,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
 
 import java.util.Set;
 
@@ -38,6 +40,9 @@ public class WechatAuthenticationProvider implements AuthenticationProvider {
     @Autowired
     private ISysUserService userService;
 
+    @Autowired
+    private UserDetailsServiceImpl userDetailsService;
+
 
     @Override
     public Authentication authenticate(Authentication authentication) throws AuthenticationException {
@@ -45,7 +50,7 @@ public class WechatAuthenticationProvider implements AuthenticationProvider {
         WechatAuthenticationToken token = (WechatAuthenticationToken) authentication;
         String code = token.getOpenId();
 
-        UserDetails userDetails = userService.loginByOpenId(code);
+        UserDetails userDetails = userDetailsService.loginByOpenId(code);
         LoginUser loginUser = (LoginUser) userDetails;
 
         WechatAuthenticationToken newToken = WechatAuthenticationToken.authenticated(loginUser.getOpenId(), userDetails, null);

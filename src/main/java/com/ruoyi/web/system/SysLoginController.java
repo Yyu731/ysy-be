@@ -6,7 +6,11 @@ import com.ruoyi.common.core.domain.entity.SysUser;
 import com.ruoyi.common.core.domain.model.LoginBody;
 import com.ruoyi.common.core.domain.model.LoginUser;
 import com.ruoyi.common.utils.SecurityUtils;
+import com.ruoyi.domain.SysMenu;
 import com.ruoyi.framework.web.service.SysLoginService;
+import com.ruoyi.framework.web.service.SysPermissionService;
+import com.ruoyi.service.SysMenuService;
+import com.ruoyi.service.SysRoleService;
 import com.ruoyi.system.service.IUserIMServece;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -14,7 +18,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * 登录验证
@@ -28,11 +34,15 @@ public class SysLoginController {
 
     @Autowired
     private IUserIMServece userIMServece;
+
 //    @Autowired
 //    private ISysMenuService menuService;
-//
-//    @Autowired
-//    private SysPermissionService permissionService;
+
+    @Autowired
+    private SysPermissionService permissionService;
+
+    @Autowired
+    private SysMenuService menuService;
 
     /**
      * 登录方法
@@ -82,14 +92,12 @@ public class SysLoginController {
     @GetMapping("/getInfo")
     public AjaxResult getInfo() {
         SysUser user = SecurityUtils.getLoginUser().getUser();
-//        // 角色集合
-//        Set<String> roles = permissionService.getRolePermission(user);
-//        // 权限集合
-//        Set<String> permissions = permissionService.getMenuPermission(user);
+        Set<String> roles = permissionService.getRolePermission(user);
+        Set<String> permissions = permissionService.getMenuPermission(user);
         AjaxResult ajax = AjaxResult.success();
         ajax.put("user", user);
-//        ajax.put("roles", roles);
-//        ajax.put("permissions", permissions);
+        ajax.put("roles", roles);
+        ajax.put("permissions", permissions);
         return ajax;
     }
 
@@ -98,11 +106,12 @@ public class SysLoginController {
      *
      * @return 路由信息
      */
-//    @GetMapping("getRouters")
-//    public AjaxResult getRouters()
-//    {
-//        Long userId = SecurityUtils.getUserId();
-//        List<SysMenu> menus = menuService.selectMenuTreeByUserId(userId);
+    @GetMapping("getRouters")
+    public AjaxResult getRouters()
+    {
+        Long userId = SecurityUtils.getUserId();
+        List<SysMenu> menus = menuService.selectMenuTreeByUserId(userId);
 //        return AjaxResult.success(menuService.buildMenus(menus));
-//    }
+        return AjaxResult.success(menus);
+    }
 }

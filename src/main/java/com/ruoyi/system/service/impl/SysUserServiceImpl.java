@@ -41,26 +41,12 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
     private static final Logger log = LoggerFactory.getLogger(SysUserServiceImpl.class);
     @Autowired
     protected Validator validator;
-    @Autowired
-    private WechatService wechatService;
+
     @Autowired
     private SysUserMapper userMapper;
     @Autowired
     private ISysConfigService configService;
-    @Autowired
-    private IUserIMServece userIMServece;
 
-    private static ArrayList DEFAULT_NICKNAME_PREFIX = Lists.newArrayList(
-            "生活更美好",
-            "大桔大利",
-            "日富一日",
-            "好柿开花",
-            "柿柿如意",
-            "一椰暴富",
-            "大柚所为",
-            "杨梅吐气",
-            "天生荔枝"
-    );
 
     /**
      * 根据条件分页查询用户列表
@@ -333,39 +319,5 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
         return userMapper.selectOne(lambdaQueryWrapper);
     }
 
-    @Override
-    public UserDetails loginByOpenId(String code) {
-        // 1 调用微信开放平台小程序的api，根据code获取openid
-        JSONObject jsonObject = wechatService.getOpenid(code);
-        // 2 若code不正确，则获取不到openid，响应失败
-        if (ObjectUtil.isNotEmpty(jsonObject.getInt("errcode"))) {
-            throw new BadCredentialsException(jsonObject.getStr("errmsg"));
-        }
-        String openId = jsonObject.getStr("openid");
 
-        /*
-         * 3 根据openid从数据库查询用户
-         * 3.1 如果为新用户，此处返回为null
-         * 3.2 如果为已经登录过的老用户，此处返回为user对象 （包含openId,phone,unionId等字段）
-         */
-        SysUser sysUser = getByOpenid(openId);
-
-        /*
-         * 4 构造用户数据，设置openId,unionId
-         * 4.1 如果member为null，则为新用户，需要构建新的member对象，并设置openId
-         * 4.2 如果member不为null，则为老用户，无需设置openId
-         */
-
-        sysUser = ObjectUtil.isNotEmpty(sysUser) ? sysUser : SysUser.builder().openId(openId).build();
-
-        if (sysUser.getUserId() != null) {
-            userMapper.updateById(sysUser);
-        } else {
-            String nickName = (String) DEFAULT_NICKNAME_PREFIX.get((int)(Math.random() * DEFAULT_NICKNAME_PREFIX.size()));
-            sysUser.setNickName(nickName);
-            userMapper.insert(sysUser);
-        }
-
-        return new LoginUser(sysUser.getUserId(), sysUser, new HashSet<String>());
-    }
 }

@@ -23,7 +23,7 @@ import java.util.List;
 import java.util.stream.IntStream;
 
 @RestController
-@RequestMapping("major")
+@RequestMapping("yxy/major")
 public class MajorController extends BaseController {
 
     @Autowired

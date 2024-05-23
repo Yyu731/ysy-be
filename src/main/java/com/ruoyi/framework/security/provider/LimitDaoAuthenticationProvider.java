@@ -32,7 +32,7 @@ import java.util.concurrent.TimeUnit;
 public class LimitDaoAuthenticationProvider extends DaoAuthenticationProvider {
 
     @Autowired
-    SysPasswordService sysPasswordService;
+    private SysPasswordService sysPasswordService;
 
     @Autowired
     private RedisCache redisCache;

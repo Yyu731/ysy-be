@@ -153,5 +153,5 @@ public interface ISysUserService extends IService<SysUser>
 
     SysUser getByOpenid(String openId);
 
-    UserDetails loginByOpenId(String code);
+
 }
