@@ -1,11 +1,15 @@
 package com.ruoyi.service.impl;
 
+import cn.hutool.core.util.StrUtil;
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.ruoyi.domain.SchoolInfo;
 import com.ruoyi.domain.SchoolLevel;
 import com.ruoyi.domain.vo.BriefSchoolVo;
 import com.ruoyi.domain.vo.TotalSchoolVo;
+import com.ruoyi.dto.TotalSchoolDto;
 import com.ruoyi.mapper.SchoolInfoMapper;
 import com.ruoyi.service.SchoolInfoService;
 import com.ruoyi.service.SchoolLevelService;
@@ -34,6 +38,9 @@ public class SchoolInfoServiceImpl extends ServiceImpl<SchoolInfoMapper, SchoolI
 
     @Autowired
     private SchoolLevelService schoolLevelService;
+
+    @Autowired
+    private SchoolInfoMapper schoolInfoMapper;
 
     @Override
     public List<BriefSchoolVo> getBriefSchoolList(List<SchoolInfo> schoolInfList) {
@@ -96,6 +103,23 @@ public class SchoolInfoServiceImpl extends ServiceImpl<SchoolInfoMapper, SchoolI
             System.out.println(totalSchoolVo.getSchoolName());
         }
         return totalSchoolVos;
+    }
+
+    @Override
+    public Page getPage(Page<SchoolInfo> page, TotalSchoolDto totalSchoolDto) {
+
+        LambdaQueryWrapper<SchoolInfo> lambdaQueryWrapper = new LambdaQueryWrapper<>();
+
+        if (StrUtil.isNotEmpty(totalSchoolDto.getSchoolName())) {
+            lambdaQueryWrapper.like(SchoolInfo::getSchoolName, totalSchoolDto.getSchoolName());
+        }
+
+
+
+        schoolInfoMapper.selectPage(page,lambdaQueryWrapper);
+
+
+        return page;
     }
 }
 
