@@ -116,7 +116,7 @@ public class SecurityConfig {
                 // 过滤请求
                 .authorizeHttpRequests(
                         auth -> auth
-                                .requestMatchers("/login","wx-login", "/register", "/captchaImage","/yxy/**").permitAll()
+                                .requestMatchers("/login","wx-login", "/register", "/captchaImage","/customer/**").permitAll()
                                 .requestMatchers(HttpMethod.GET, "/", "/*.html", "/**.html", "/**.css", "/**.js", "/profile/**").permitAll()
                                 .requestMatchers("/swagger-ui.html", "/swagger-resources/**", "/webjars/**", "/*/api-docs", "/druid/**").permitAll()
                                 .anyRequest().authenticated()

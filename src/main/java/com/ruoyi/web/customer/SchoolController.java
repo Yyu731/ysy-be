@@ -1,4 +1,4 @@
-package com.ruoyi.web.yxy;
+package com.ruoyi.web.customer;
 
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
@@ -9,7 +9,6 @@ import com.ruoyi.domain.vo.BriefSchoolVo;
 import com.ruoyi.domain.vo.TotalSchoolVo;
 import com.ruoyi.service.SchoolInfoService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -17,7 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 
 @RestController
-@RequestMapping("yxy/school")
+@RequestMapping("customer/school")
 public class SchoolController extends BaseController {
 
     @Autowired
