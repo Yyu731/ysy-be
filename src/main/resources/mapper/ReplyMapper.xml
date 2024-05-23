@@ -10,10 +10,11 @@
             <result property="postId" column="post_id" jdbcType="INTEGER"/>
             <result property="replyContent" column="reply_content" jdbcType="VARCHAR"/>
             <result property="replyTime" column="reply_time" jdbcType="TIMESTAMP"/>
+            <result property="ipAddress" column="ip_address" jdbcType="VARCHAR"/>
     </resultMap>
 
     <sql id="Base_Column_List">
         reply_id,replier_id,post_id,
-        reply_content,reply_time
+        reply_content,reply_time,ip_address
     </sql>
 </mapper>
