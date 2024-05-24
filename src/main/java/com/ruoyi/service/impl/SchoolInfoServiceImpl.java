@@ -1,5 +1,6 @@
 package com.ruoyi.service.impl;
 
+import cn.hutool.core.collection.CollectionUtil;
 import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
@@ -10,7 +11,9 @@ import com.ruoyi.domain.SchoolLevel;
 import com.ruoyi.domain.vo.BriefSchoolVo;
 import com.ruoyi.domain.vo.TotalSchoolVo;
 import com.ruoyi.dto.TotalSchoolDto;
+import com.ruoyi.mapper.SchoolFeatureMapper;
 import com.ruoyi.mapper.SchoolInfoMapper;
+import com.ruoyi.mapper.SchoolLevelMapper;
 import com.ruoyi.service.SchoolInfoService;
 import com.ruoyi.service.SchoolLevelService;
 import com.ruoyi.service.SchoolProvinceService;
@@ -42,14 +45,19 @@ public class SchoolInfoServiceImpl extends ServiceImpl<SchoolInfoMapper, SchoolI
     @Autowired
     private SchoolInfoMapper schoolInfoMapper;
 
+    @Autowired
+    private SchoolLevelMapper schoolLevelMapper;
+    @Autowired
+    private SchoolFeatureMapper schoolFeatureMapper;
+
     @Override
     public List<BriefSchoolVo> getBriefSchoolList(List<SchoolInfo> schoolInfList) {
 
         List<BriefSchoolVo> briefSchoolVos = new ArrayList<>();
-        int num=0;
+        int num = 0;
         for (SchoolInfo schoolInfo : schoolInfList) {
             num++;
-            if(schoolInfo.getSchoolHot()==1) {
+            if (schoolInfo.getSchoolHot() == 1) {
                 BriefSchoolVo briefSchoolVo = new BriefSchoolVo();
                 briefSchoolVo.setSchoolId(schoolInfo.getSchoolId());
                 briefSchoolVo.setSchoolName(schoolInfo.getSchoolName());
@@ -59,7 +67,7 @@ public class SchoolInfoServiceImpl extends ServiceImpl<SchoolInfoMapper, SchoolI
                 briefSchoolVo.setFeatures(
                         schoolLevelService.list(
                                         Wrappers.lambdaQuery(SchoolLevel.class)
-                                                .in(SchoolLevel::getSchoolFeatureId, 1,2,3,4)
+                                                .in(SchoolLevel::getSchoolFeatureId, 1, 2, 3, 4)
                                                 .eq(SchoolLevel::getSchoolId, schoolInfo.getSchoolId()))
                                 .stream().map(item -> item.getFeatureName()).limit(3)
                                 .collect(Collectors.toList()));
@@ -67,39 +75,40 @@ public class SchoolInfoServiceImpl extends ServiceImpl<SchoolInfoMapper, SchoolI
             }
             System.out.println(num);
         }
-        for (BriefSchoolVo briefSchoolVo: briefSchoolVos){
+        for (BriefSchoolVo briefSchoolVo : briefSchoolVos) {
             System.out.println(briefSchoolVo.getSchoolName());
         }
         return briefSchoolVos;
     }
+
     @Override
     public List<TotalSchoolVo> getTotalSchoolList(List<SchoolInfo> schoolInfList) {
         List<TotalSchoolVo> totalSchoolVos = new ArrayList<>();
         for (SchoolInfo schoolInfo : schoolInfList) {
-                TotalSchoolVo totalSchoolVo = new TotalSchoolVo();
-                totalSchoolVo.setSchoolId(schoolInfo.getSchoolId());
-                totalSchoolVo.setSchoolName(schoolInfo.getSchoolName());
-                totalSchoolVo.setSchoolBadge(schoolInfo.getSchoolBadge());
-                totalSchoolVo.setProvince(schoolProvinceService.getById(schoolInfo.getProvinceId()).getRegionName());
-                totalSchoolVo.setSchoolType(schoolTypeService.getById(schoolInfo.getSchoolTypeId()).getTypeName());
+            TotalSchoolVo totalSchoolVo = new TotalSchoolVo();
+            totalSchoolVo.setSchoolId(schoolInfo.getSchoolId());
+            totalSchoolVo.setSchoolName(schoolInfo.getSchoolName());
+            totalSchoolVo.setSchoolBadge(schoolInfo.getSchoolBadge());
+            totalSchoolVo.setProvince(schoolProvinceService.getById(schoolInfo.getProvinceId()).getRegionName());
+            totalSchoolVo.setSchoolType(schoolTypeService.getById(schoolInfo.getSchoolTypeId()).getTypeName());
             List<SchoolLevel> schoolLevel = schoolLevelService.list(Wrappers.<SchoolLevel>lambdaQuery()
                     .in(SchoolLevel::getSchoolFeatureId, 5, 6)
                     .eq(SchoolLevel::getSchoolId, schoolInfo.getSchoolId())
             );
-            for (SchoolLevel schoolLevel1:schoolLevel) {
+            for (SchoolLevel schoolLevel1 : schoolLevel) {
                 totalSchoolVo.setTypeFeatures(schoolLevel1.getFeatureName());
             }
-                totalSchoolVo.setFeatures(
-                        schoolLevelService.list(
-                                        Wrappers.lambdaQuery(SchoolLevel.class)
-                                                .in(SchoolLevel::getSchoolFeatureId, 1,2,3,4)
-                                                .eq(SchoolLevel::getSchoolId, schoolInfo.getSchoolId()))
-                                .stream().map(item -> item.getFeatureName()).limit(3)
-                                .collect(Collectors.toList()));
-                totalSchoolVos.add(totalSchoolVo);
+            totalSchoolVo.setFeatures(
+                    schoolLevelService.list(
+                                    Wrappers.lambdaQuery(SchoolLevel.class)
+                                            .in(SchoolLevel::getSchoolFeatureId, 1, 2, 3, 4)
+                                            .eq(SchoolLevel::getSchoolId, schoolInfo.getSchoolId()))
+                            .stream().map(item -> item.getFeatureName()).limit(3)
+                            .collect(Collectors.toList()));
+            totalSchoolVos.add(totalSchoolVo);
         }
 
-        for (TotalSchoolVo totalSchoolVo: totalSchoolVos){
+        for (TotalSchoolVo totalSchoolVo : totalSchoolVos) {
             System.out.println(totalSchoolVo.getSchoolName());
         }
         return totalSchoolVos;
@@ -114,10 +123,47 @@ public class SchoolInfoServiceImpl extends ServiceImpl<SchoolInfoMapper, SchoolI
             lambdaQueryWrapper.like(SchoolInfo::getSchoolName, totalSchoolDto.getSchoolName());
         }
 
+        schoolInfoMapper.selectPage(page, lambdaQueryWrapper);
+
+        return page;
+    }
+
+    @Override
+    public Page<SchoolInfo> getSchoolInfoList(Page<SchoolInfo> page, TotalSchoolDto schoolDto) {
+
+        LambdaQueryWrapper<SchoolInfo> lambdaQueryWrapper = new LambdaQueryWrapper<>();
+
+        if (StrUtil.isNotEmpty(schoolDto.getSchoolName())) {
+            lambdaQueryWrapper.like(SchoolInfo::getSchoolName, schoolDto.getSchoolName());
+        }
+
+        if (CollectionUtil.isNotEmpty(schoolDto.getProvinceId())) {
+            lambdaQueryWrapper.in(SchoolInfo::getProvinceId, schoolDto.getProvinceId());
+        }
+
+        if (CollectionUtil.isNotEmpty(schoolDto.getSchoolTypeId())) {
+            lambdaQueryWrapper.in(SchoolInfo::getSchoolTypeId, schoolDto.getSchoolTypeId());
+        }
+
+        if (CollectionUtil.isNotEmpty(schoolDto.getSchoolFeatureId())) {
+            List<Long> schoolListId = schoolLevelMapper.selectList(
+                    Wrappers.lambdaQuery(SchoolLevel.class)
+                            .in(SchoolLevel::getSchoolFeatureId, schoolDto.getSchoolFeatureId())
+            ).stream().map(SchoolLevel::getSchoolId).collect(Collectors.toList());
+            lambdaQueryWrapper.in(SchoolInfo::getSchoolId, schoolListId);
+        }
+
+        schoolInfoMapper.selectPage(page, lambdaQueryWrapper);
 
 
-        schoolInfoMapper.selectPage(page,lambdaQueryWrapper);
-
+        page.getRecords().forEach(school -> {
+            school.setSchoolFeatureIds(
+                    schoolLevelMapper.selectList(
+                            Wrappers.lambdaQuery(SchoolLevel.class)
+                                    .eq(SchoolLevel::getSchoolId, school.getSchoolId())
+                    ).stream().map(SchoolLevel::getSchoolFeatureId).collect(Collectors.toList())
+            );
+        });
 
         return page;
     }

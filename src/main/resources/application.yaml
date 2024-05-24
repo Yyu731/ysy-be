@@ -188,7 +188,7 @@ mybatis-plus:
   global-config:
     db-config:
       # 配置MyBatis-Plus的主键策略
-      id-type: assign_id
+      id-type: auto
 #      logic-delete-field: delFlag
 #      logic-delete-value: 1
 #      logic-not-delete-value: 0

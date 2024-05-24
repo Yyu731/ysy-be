@@ -7,6 +7,8 @@ import com.baomidou.mybatisplus.annotation.TableName;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
+import java.util.List;
+
 import lombok.Data;
 
 /**
@@ -44,6 +46,9 @@ public class SchoolInfo implements Serializable {
     private Integer numSubject;
 
     private Integer numLab;
+
+    @TableField(exist = false)
+    private List<Integer> schoolFeatureIds;
 
     private String createBy;
 

@@ -1,6 +1,10 @@
 package com.ruoyi.common.core.domain.entity;
 
+import com.alibaba.fastjson2.annotation.JSONField;
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import com.ruoyi.common.annotation.Excel;
 import com.ruoyi.common.annotation.Excel.ColumnType;
 import com.ruoyi.common.annotation.Excel.Type;
@@ -36,6 +40,7 @@ public class SysUser extends BaseEntity
     /** 用户ID */
     @Excel(name = "用户序号", cellType = ColumnType.NUMERIC, prompt = "用户编号")
     @TableId
+    @JsonSerialize(using = ToStringSerializer.class)
     private Long userId;
 
     /** 用户账号 */
@@ -84,6 +89,11 @@ public class SysUser extends BaseEntity
     @Excel(name = "最后登录时间", width = 30, dateFormat = "yyyy-MM-dd HH:mm:ss", type = Type.EXPORT)
     private Date loginDate;
 
+    @TableField(exist = false)
+    private SysRole role;
+
+    @TableField(exist = false)
+    private Long roleId;
 
     public SysUser()
     {

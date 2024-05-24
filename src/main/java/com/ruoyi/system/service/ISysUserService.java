@@ -1,5 +1,6 @@
 package com.ruoyi.system.service;
 
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.ruoyi.common.core.domain.entity.SysUser;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -154,4 +155,9 @@ public interface ISysUserService extends IService<SysUser>
     SysUser getByOpenid(String openId);
 
 
+    int createUser(SysUser user);
+
+    Page<SysUser> getUserList(Page<SysUser> page, SysUser user);
+
+    int updateUser(SysUser user);
 }

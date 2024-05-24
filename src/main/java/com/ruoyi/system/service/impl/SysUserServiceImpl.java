@@ -1,34 +1,30 @@
 package com.ruoyi.system.service.impl;
 
-import cn.hutool.core.util.ObjectUtil;
-import cn.hutool.json.JSONObject;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.toolkit.Wrappers;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.ruoyi.common.annotation.DataScope;
 import com.ruoyi.common.constant.UserConstants;
 import com.ruoyi.common.core.domain.entity.SysUser;
-import com.ruoyi.common.core.domain.model.LoginUser;
 import com.ruoyi.common.exception.ServiceException;
 import com.ruoyi.common.utils.SecurityUtils;
 import com.ruoyi.common.utils.StringUtils;
 import com.ruoyi.common.utils.bean.BeanValidators;
 import com.ruoyi.common.utils.spring.SpringUtils;
+import com.ruoyi.domain.SysRole;
+import com.ruoyi.domain.SysUserRole;
+import com.ruoyi.mapper.SysRoleMapper;
+import com.ruoyi.mapper.SysUserRoleMapper;
 import com.ruoyi.system.mapper.SysUserMapper;
-import com.ruoyi.system.service.IUserIMServece;
 import com.ruoyi.system.service.ISysConfigService;
 import com.ruoyi.system.service.ISysUserService;
-import com.ruoyi.system.service.WechatService;
 import jakarta.validation.Validator;
-import org.assertj.core.util.Lists;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.authentication.BadCredentialsException;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
 
 /**
@@ -46,6 +42,12 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
     private SysUserMapper userMapper;
     @Autowired
     private ISysConfigService configService;
+
+    @Autowired
+    private SysRoleMapper roleMapper;
+
+    @Autowired
+    private SysUserRoleMapper userRoleMapper;
 
 
     /**
@@ -317,6 +319,57 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
         LambdaQueryWrapper<SysUser> lambdaQueryWrapper = new LambdaQueryWrapper<>();
         lambdaQueryWrapper.eq(SysUser::getOpenId, openId);
         return userMapper.selectOne(lambdaQueryWrapper);
+    }
+
+    @Override
+    public int createUser(SysUser user) {
+        user.setStatus("1");
+        userMapper.insert(user);
+        userRoleMapper.insert(SysUserRole.builder().roleId(3L).userId(user.getUserId()).build());
+        return userMapper.selectCount(Wrappers.lambdaQuery(SysUser.class).eq(SysUser::getUserId, user.getUserId())).intValue();
+    }
+
+    @Override
+    public int updateUser(SysUser user) {
+        userRoleMapper.update(SysUserRole.builder().roleId(user.getRoleId()).userId(user.getUserId()).build(),
+                Wrappers.lambdaUpdate(SysUserRole.class).eq(SysUserRole::getUserId, user.getUserId()));
+        return userMapper.updateUser(user);
+    }
+
+    @Override
+    public Page<SysUser> getUserList(Page<SysUser> page, SysUser user) {
+
+        LambdaQueryWrapper<SysUser> lambdaQueryWrapper = new LambdaQueryWrapper<>();
+        if (StringUtils.isNotNull(user.getUserName())) {
+            lambdaQueryWrapper.like(SysUser::getUserName, user.getUserName());
+        }
+
+        if (StringUtils.isNotNull(user.getSex())) {
+            lambdaQueryWrapper.eq(SysUser::getSex, user.getSex());
+        }
+
+        if (StringUtils.isNotNull(user.getPhonenumber())) {
+            lambdaQueryWrapper.like(SysUser::getPhonenumber, user.getPhonenumber());
+        }
+
+        if (StringUtils.isNotNull(user.getStatus())) {
+            lambdaQueryWrapper.like(SysUser::getStatus, user.getStatus());
+        }
+
+        userMapper.selectPage(page, lambdaQueryWrapper);
+
+        page.getRecords().forEach(
+                record -> {
+                    Long roleId = userRoleMapper.selectOne(Wrappers.lambdaQuery(SysUserRole.class)
+                                    .eq(SysUserRole::getUserId, record.getUserId()))
+                            .getRoleId();
+                    SysRole sysRole = roleMapper.selectOne(Wrappers.lambdaQuery(SysRole.class)
+                            .eq(SysRole::getRoleId, roleId));
+                    record.setRole(sysRole);
+                }
+        );
+
+        return page;
     }
 
 
