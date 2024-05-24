@@ -7,6 +7,7 @@ import com.ruoyi.common.core.page.TableDataInfo;
 import com.ruoyi.domain.SchoolInfo;
 import com.ruoyi.domain.vo.BriefSchoolVo;
 import com.ruoyi.domain.vo.TotalSchoolVo;
+import com.ruoyi.dto.TotalSchoolDto;
 import com.ruoyi.service.SchoolInfoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -36,9 +37,9 @@ public class SchoolController extends BaseController {
     }
 
     @GetMapping("/totallist")
-    public TableDataInfo totallist(Integer num) {
+    public TableDataInfo totallist(TotalSchoolDto totalSchoolDto) {
         Page<SchoolInfo> page = getPage();
-        schoolInfoService.page(page);
+        schoolInfoService.getSchoolInfoList(page, totalSchoolDto);
         //10条记录里
         List<SchoolInfo> records = page.getRecords();
 
