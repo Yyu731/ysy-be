@@ -1,5 +1,8 @@
 package com.ruoyi.dto;
 
+import lombok.Data;
+
+@Data
 public class TotalMajorDto {
 
     private Integer majorId;
