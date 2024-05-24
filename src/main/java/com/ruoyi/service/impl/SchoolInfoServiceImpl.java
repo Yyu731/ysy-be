@@ -6,18 +6,18 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.ruoyi.domain.Ranking;
 import com.ruoyi.domain.SchoolInfo;
 import com.ruoyi.domain.SchoolLevel;
+import com.ruoyi.domain.SchoolPic;
 import com.ruoyi.domain.vo.BriefSchoolVo;
+import com.ruoyi.domain.vo.DetailSchoolVo;
 import com.ruoyi.domain.vo.TotalSchoolVo;
 import com.ruoyi.dto.TotalSchoolDto;
 import com.ruoyi.mapper.SchoolFeatureMapper;
 import com.ruoyi.mapper.SchoolInfoMapper;
 import com.ruoyi.mapper.SchoolLevelMapper;
-import com.ruoyi.service.SchoolInfoService;
-import com.ruoyi.service.SchoolLevelService;
-import com.ruoyi.service.SchoolProvinceService;
-import com.ruoyi.service.SchoolTypeService;
+import com.ruoyi.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -41,6 +41,10 @@ public class SchoolInfoServiceImpl extends ServiceImpl<SchoolInfoMapper, SchoolI
 
     @Autowired
     private SchoolLevelService schoolLevelService;
+    @Autowired
+    private RankingService rankingService;
+    @Autowired
+    private SchoolPicService schoolPicService;
 
     @Autowired
     private SchoolInfoMapper schoolInfoMapper;
@@ -108,25 +112,78 @@ public class SchoolInfoServiceImpl extends ServiceImpl<SchoolInfoMapper, SchoolI
             totalSchoolVos.add(totalSchoolVo);
         }
 
-        for (TotalSchoolVo totalSchoolVo : totalSchoolVos) {
-            System.out.println(totalSchoolVo.getSchoolName());
-        }
+//        for (TotalSchoolVo totalSchoolVo : totalSchoolVos) {
+//            System.out.println(totalSchoolVo.getSchoolName());
+//        }
         return totalSchoolVos;
     }
-
     @Override
-    public Page getPage(Page<SchoolInfo> page, TotalSchoolDto totalSchoolDto) {
-
-        LambdaQueryWrapper<SchoolInfo> lambdaQueryWrapper = new LambdaQueryWrapper<>();
-
-        if (StrUtil.isNotEmpty(totalSchoolDto.getSchoolName())) {
-            lambdaQueryWrapper.like(SchoolInfo::getSchoolName, totalSchoolDto.getSchoolName());
+    public List<DetailSchoolVo> getDetailSchoolList(List<SchoolInfo> schoolInfList){
+        List<DetailSchoolVo> detailSchoolVos=new ArrayList<>();
+        for (SchoolInfo schoolInfo : schoolInfList) {
+            DetailSchoolVo detailSchoolVo=new DetailSchoolVo();
+            detailSchoolVo.setSchoolId(schoolInfo.getSchoolId());
+            detailSchoolVo.setSchoolName(schoolInfo.getSchoolName());
+            detailSchoolVo.setSchoolBadge(schoolInfo.getSchoolBadge());
+            detailSchoolVo.setProvince(schoolProvinceService.getById(schoolInfo.getProvinceId()).getRegionName());
+            detailSchoolVo.setSchoolType(schoolTypeService.getById(schoolInfo.getSchoolTypeId()).getTypeName());
+            detailSchoolVo.setIntro(schoolInfo.getIntro());
+            detailSchoolVo.setSchoolAddress(schoolInfo.getSchoolAddress());
+            detailSchoolVo.setCreateDate(schoolInfo.getCreateDate());
+            detailSchoolVo.setSchoolEmail(schoolInfo.getSchoolEmail());
+            detailSchoolVo.setSchoolPhone(schoolInfo.getSchoolPhone());
+            detailSchoolVo.setSchoolSite(schoolInfo.getSchoolSite());
+            detailSchoolVo.setSchoolSpace(schoolInfo.getSchoolSpace());
+            detailSchoolVo.setNumMaster(schoolInfo.getNumMaster());
+            detailSchoolVo.setNumDoctor(schoolInfo.getNumDoctor());
+            detailSchoolVo.setNumLab(schoolInfo.getNumLab());
+            detailSchoolVo.setNumSubject(schoolInfo.getNumSubject());
+//            detailSchoolVo.setQSrank(rankingService.getById(schoolInfo.getProvinceId()).getRanking());
+            Ranking ranking=rankingService.getOne(Wrappers.<Ranking>lambdaQuery()
+                    .eq(Ranking::getSchoolId,schoolInfo.getSchoolId()));
+            if (ranking != null) {
+                detailSchoolVo.setQSrank(ranking.getRanking());
+            } else {
+                detailSchoolVo.setQSrank("未排名");
+            }
+            List<SchoolLevel> schoolLevel = schoolLevelService.list(Wrappers.<SchoolLevel>lambdaQuery()
+                    .in(SchoolLevel::getSchoolFeatureId, 5, 6)
+                    .eq(SchoolLevel::getSchoolId, schoolInfo.getSchoolId())
+            );
+            for (SchoolLevel schoolLevel1 : schoolLevel) {
+                detailSchoolVo.setTypeFeatures(schoolLevel1.getFeatureName());
+            }
+            detailSchoolVo.setFeatures(
+                    schoolLevelService.list(
+                                    Wrappers.lambdaQuery(SchoolLevel.class)
+                                            .in(SchoolLevel::getSchoolFeatureId, 1, 2, 3, 4)
+                                            .eq(SchoolLevel::getSchoolId, schoolInfo.getSchoolId()))
+                            .stream().map(item -> item.getFeatureName()).limit(3)
+                            .collect(Collectors.toList()));
+            detailSchoolVo.setSchoolPic(schoolPicService.list(
+                    Wrappers.lambdaQuery(SchoolPic.class)
+                            .eq(SchoolPic::getSchoolId,schoolInfo.getSchoolId()))
+                            .stream().map(item -> item.getImageUrl())
+                            .collect(Collectors.toList())
+            );
+            detailSchoolVos.add(detailSchoolVo);
         }
 
-        schoolInfoMapper.selectPage(page, lambdaQueryWrapper);
-
-        return page;
+        return detailSchoolVos;
     }
+//    @Override
+//    public Page getPage(Page<SchoolInfo> page, TotalSchoolDto totalSchoolDto) {
+//
+//        LambdaQueryWrapper<SchoolInfo> lambdaQueryWrapper = new LambdaQueryWrapper<>();
+//
+//        if (StrUtil.isNotEmpty(totalSchoolDto.getSchoolName())) {
+//            lambdaQueryWrapper.like(SchoolInfo::getSchoolName, totalSchoolDto.getSchoolName());
+//        }
+//
+//        schoolInfoMapper.selectPage(page, lambdaQueryWrapper);
+//
+//        return page;
+//    }
 
     @Override
     public Page<SchoolInfo> getSchoolInfoList(Page<SchoolInfo> page, TotalSchoolDto schoolDto) {

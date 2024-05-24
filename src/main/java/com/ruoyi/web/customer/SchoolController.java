@@ -6,6 +6,7 @@ import com.ruoyi.common.core.controller.BaseController;
 import com.ruoyi.common.core.page.TableDataInfo;
 import com.ruoyi.domain.SchoolInfo;
 import com.ruoyi.domain.vo.BriefSchoolVo;
+import com.ruoyi.domain.vo.DetailSchoolVo;
 import com.ruoyi.domain.vo.TotalSchoolVo;
 import com.ruoyi.dto.TotalSchoolDto;
 import com.ruoyi.service.SchoolInfoService;
@@ -47,5 +48,14 @@ public class SchoolController extends BaseController {
         return getDataTable(totalSchoolVoList);
     }
 
+    @GetMapping("/detaillist")
+    public TableDataInfo detaillist() {
+        Page<SchoolInfo> page = getPage();
+        schoolInfoService.page(page);
+        //10条记录里
+        List<SchoolInfo> records = page.getRecords();
 
+        List<DetailSchoolVo> detailSchoolVoList = schoolInfoService.getDetailSchoolList(records);
+        return getDataTable(detailSchoolVoList);
+    }
 }

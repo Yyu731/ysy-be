@@ -5,6 +5,7 @@ import com.ruoyi.common.core.domain.entity.SysUser;
 import com.ruoyi.domain.SchoolInfo;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.ruoyi.domain.vo.BriefSchoolVo;
+import com.ruoyi.domain.vo.DetailSchoolVo;
 import com.ruoyi.domain.vo.TotalSchoolVo;
 import com.ruoyi.dto.TotalSchoolDto;
 
@@ -20,7 +21,11 @@ public interface SchoolInfoService extends IService<SchoolInfo> {
     List<BriefSchoolVo> getBriefSchoolList(List<SchoolInfo> schoolInfList);
     List<TotalSchoolVo> getTotalSchoolList(List<SchoolInfo> schoolInfList);
 
-    Page getPage(Page<SchoolInfo> page, TotalSchoolDto totalSchoolDto);
+    List<DetailSchoolVo> getDetailSchoolList(List<SchoolInfo> schoolInfList);
+
+//    Page getPage(Page<SchoolInfo> page, TotalSchoolDto totalSchoolDto);
 
     Page<SchoolInfo> getSchoolInfoList(Page<SchoolInfo> page, TotalSchoolDto schoolDto);
+
+
 }
