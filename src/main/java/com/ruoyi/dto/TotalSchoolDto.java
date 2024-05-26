@@ -1,6 +1,5 @@
 package com.ruoyi.dto;
 
-import io.swagger.v3.oas.models.security.SecurityScheme;
 import lombok.Data;
 
 import java.util.List;
@@ -12,13 +11,17 @@ public class TotalSchoolDto {
 
     private String schoolName;
 
-    private List<Integer> provinceId;
+    private Integer provinveId;
+
+    private List<Integer> provinceIds;
 
     private String province;
 
-    private List<Integer> schoolTypeId;
+    private Integer schoolTypeId;
 
-    private List<Integer> schoolFeatureId;
+    private List<Integer> schoolTypeIds;
+
+    private List<Integer> schoolFeatureIds;
 
     private Integer schoolHot;
 }

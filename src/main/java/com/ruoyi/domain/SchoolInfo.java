@@ -4,12 +4,12 @@ import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
+import lombok.Data;
+
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
-
-import lombok.Data;
 
 /**
  * @TableName school_info
@@ -17,6 +17,7 @@ import lombok.Data;
 @TableName(value ="school_info")
 @Data
 public class SchoolInfo implements Serializable {
+    @TableId(type= IdType.AUTO)
     private Integer schoolId;
 
     private String schoolName;

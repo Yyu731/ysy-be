@@ -17,7 +17,7 @@ public class SchoolLevel implements Serializable {
 
     private Integer schoolFeatureId;
 
-    private Long schoolId;
+    private Integer schoolId;
 
     private String schoolName;
 
