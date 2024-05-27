@@ -25,11 +25,36 @@ public class ProductServiceImpl extends ServiceImpl<ProductMapper, Product>
 
     public List<ProductVo> getTotalProductList(List<Product> productList){
         List<ProductVo> productVos=new ArrayList<>();
+        for (Product product:productList){
+            ProductVo productVo=new ProductVo();
+            productVo.setProductId(product.getProductId());
+            productVo.setProductName(product.getProductName());
+            productVo.setProductImage(product.getProductImage());
+            productVo.setProductCondition(product.getProductCondition());
+            productVo.setPrice(product.getPrice());
+            productVo.setSubject(product.getSubject());
+            productVo.setDescription(product.getDescription());
+            productVos.add(productVo);
+        }
+
         return  productVos;
     }
 
     public List<DetailProductVo> getDetailProductList(List<Product> productList){
         List<DetailProductVo> detailProductVos=new ArrayList<>();
+        for (Product product:productList){
+            DetailProductVo detailProductVo=new DetailProductVo();
+            detailProductVo.setProductId(product.getProductId());
+            detailProductVo.setProductName(product.getProductName());
+            detailProductVo.setProductImage(product.getProductImage());
+            detailProductVo.setProductCondition(product.getProductCondition());
+            detailProductVo.setPrice(product.getPrice());
+            detailProductVo.setSubject(product.getSubject());
+//            detailProductVo.setDescription(product.getDescription());
+            detailProductVos.add(detailProductVo);
+        }
+
+
         return  detailProductVos;
     }
 
@@ -38,6 +63,9 @@ public class ProductServiceImpl extends ServiceImpl<ProductMapper, Product>
     public Page<Product> getProductList(Page<Product> page, TotalProductDto totalProductDto){
         return page;
     }
+
+
+
 }
 
 

@@ -26,4 +26,5 @@ public interface ProductService extends IService<Product> {
 //    Page getPage(Page<SchoolInfo> page, TotalSchoolDto totalSchoolDto);
 
     Page<Product> getProductList(Page<Product> page, TotalProductDto totalProductDto);
+//    Page<Product> getProductsList(Page<Product> page);
 }
