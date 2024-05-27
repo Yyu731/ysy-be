@@ -1,5 +1,6 @@
 package com.ruoyi.web.customer;
 
+import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.ruoyi.common.core.controller.BaseController;
 import com.ruoyi.common.core.page.TableDataInfo;
@@ -29,10 +30,10 @@ public class MajorController extends BaseController {
     public TableDataInfo hotlist()
     {
         Page<SchoolMajor> page = getPage();
-        schoolMajorService.page(page);
-        int[] ids = IntStream.rangeClosed(1, 10).toArray();
+//        schoolMajorService.page(page);
+//        int[] ids = IntStream.rangeClosed(10, 20).toArray();
 //        schoolMajorService.page(page, Wrappers.lambdaQuery(SchoolMajor.class).in(SchoolMajor::getRelationId, ids));
-//        schoolMajorService.page(page, Wrappers.lambdaQuery(SchoolMajor.class).in(SchoolMajor::getRelationId,1,2,3,4,5,6,7,8,9,10));
+        schoolMajorService.page(page, Wrappers.lambdaQuery(SchoolMajor.class).in(SchoolMajor::getRelationId,1,2,3,4,5,6,7,8,9,10));
         //10条记录里
         List<SchoolMajor> records = page.getRecords();
 //        int num=0;
