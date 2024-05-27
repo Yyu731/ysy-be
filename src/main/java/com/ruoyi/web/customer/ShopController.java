@@ -27,9 +27,9 @@ public class ShopController extends BaseController {
     private ProductService productService;
 
     @GetMapping("/totallist")
-    public TableDataInfo totallist(TotalProductDto totalProductDto) {
+    public TableDataInfo totallist() {
         Page<Product> page = getPage();
-        productService.getProductList(page, totalProductDto);
+        productService.page(page);
         //10条记录里
         List<Product> records = page.getRecords();
 
@@ -37,14 +37,14 @@ public class ShopController extends BaseController {
         return getDataTable(totalSchoolVoList);
     }
 
-    @GetMapping("/detaillist")
-    public TableDataInfo detaillist() {
-        Page<Product> page = getPage();
-        productService.page(page);
-        //10条记录里
-        List<Product> records = page.getRecords();
-
-        List<DetailProductVo> detailProductVoList = productService.getDetailProductList(records);
-        return getDataTable(detailProductVoList);
-    }
+//    @GetMapping("/detaillist")
+//    public TableDataInfo detaillist() {
+//        Page<Product> page = getPage();
+//        productService.page(page);
+//        //10条记录里
+//        List<Product> records = page.getRecords();
+//
+//        List<DetailProductVo> detailProductVoList = productService.getDetailProductList(records);
+//        return getDataTable(detailProductVoList);
+//    }
 }

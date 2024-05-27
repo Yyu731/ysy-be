@@ -16,6 +16,7 @@ public class DetailProductVo implements Serializable {
 
     private String subject;
 
+    //一手书/二手书
     private String productCondition;
 
     private String productImage;
