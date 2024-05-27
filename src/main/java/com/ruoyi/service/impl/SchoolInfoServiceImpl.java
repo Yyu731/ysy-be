@@ -2,6 +2,7 @@ package com.ruoyi.service.impl;
 
 import cn.hutool.core.collection.CollectionUtil;
 import cn.hutool.core.date.DateUtil;
+import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
@@ -209,6 +210,10 @@ public class SchoolInfoServiceImpl extends ServiceImpl<SchoolInfoMapper, SchoolI
                             .in(SchoolLevel::getSchoolFeatureId, schoolDto.getSchoolFeatureIds())
             ).stream().map(SchoolLevel::getSchoolId).collect(Collectors.toList());
             lambdaQueryWrapper.in(SchoolInfo::getSchoolId, schoolListId);
+        }
+
+        if (ObjectUtil.isNotEmpty(schoolDto.getSchoolHot())) {
+            lambdaQueryWrapper.eq(SchoolInfo::getSchoolHot, schoolDto.getSchoolHot());
         }
 
         lambdaQueryWrapper.orderByDesc(SchoolInfo::getSchoolHot);

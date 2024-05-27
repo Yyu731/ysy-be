@@ -20,6 +20,8 @@ public class Major implements Serializable {
 
     private String majorName;
 
+    private Integer parentId;
+
     private String createBy;
 
     private Date createTime;
@@ -29,10 +31,6 @@ public class Major implements Serializable {
     private Date updateTime;
 
     private String remark;
-
-    private Integer parentMajorId;
-
-    private String degreeName;
 
     private static final long serialVersionUID = 1L;
 }

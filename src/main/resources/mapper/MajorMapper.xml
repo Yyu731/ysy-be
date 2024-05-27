@@ -8,19 +8,44 @@
             <id property="majorId" column="major_id" jdbcType="INTEGER"/>
             <result property="majorCode" column="major_code" jdbcType="VARCHAR"/>
             <result property="majorName" column="major_name" jdbcType="VARCHAR"/>
+            <result property="parentId" column="parent_id" jdbcType="INTEGER"/>
             <result property="createBy" column="create_by" jdbcType="VARCHAR"/>
             <result property="createTime" column="create_time" jdbcType="TIMESTAMP"/>
             <result property="updateBy" column="update_by" jdbcType="VARCHAR"/>
             <result property="updateTime" column="update_time" jdbcType="TIMESTAMP"/>
             <result property="remark" column="remark" jdbcType="VARCHAR"/>
-            <result property="parentMajorId" column="parent_major_id" jdbcType="INTEGER"/>
-            <result property="degreeName" column="degree_name" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <resultMap id="MajorVoMap" type="com.ruoyi.domain.vo.TotalMajorVo">
+        <id property="majorId" column="major_id" jdbcType="INTEGER"/>
+        <result property="majorCode" column="major_code" jdbcType="VARCHAR"/>
+        <result property="majorName" column="major_name" jdbcType="VARCHAR"/>
+        <result property="degreeType" column="degree_type" jdbcType="INTEGER"/>
+        <result property="subLevelCode" column="sub_level_code" jdbcType="INTEGER"/>
+        <result property="subDiscipline" column="sub_discipline" jdbcType="VARCHAR"/>
+        <result property="firstLevenCode" column="first_level_code" jdbcType="INTEGER"/>
+        <result property="firstLevelDiscipline" column="first_level_discipline" jdbcType="VARCHAR"/>
     </resultMap>
 
     <sql id="Base_Column_List">
         major_id,major_code,major_name,
-        create_by,create_time,update_by,
-        update_time,remark,parent_major_id,
-        degree_name
+        parent_id,create_by,create_time,
+        update_by,update_time,remark
     </sql>
+    <select id="selectTotalMajorVoPage"
+            resultMap="MajorVoMap">
+        select m1.major_id,
+               m1.major_code,
+               m1.major_name,
+               m2.degree_type,
+               m2.major_code sub_level_code,
+               m2.major_name sub_discipline,
+               m3.major_code first_level_code,
+               m3.major_name first_level_discipline
+        from major m1
+                 left join major_secondary m2
+                           on m1.parent_id = m2.major_secondary_id
+                 left join major_primary m3
+                           on m2.parent_id = m3.major_primary_id
+    </select>
 </mapper>

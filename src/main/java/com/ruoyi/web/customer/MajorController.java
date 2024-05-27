@@ -49,10 +49,8 @@ public class MajorController extends BaseController {
     public TableDataInfo totallist()
     {
         Page<Major> page = getPage();
-        majorService.page(page);
-        List<Major> records = page.getRecords();
-        List<TotalMajorVo> totalMajorVoList =majorService.getMajorVoList(records);
-        return getDataTable(totalMajorVoList);
+        majorService.selectTotalMajorVoList(page);
+        return getDataTable(page);
     }
 
 

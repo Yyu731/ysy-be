@@ -65,7 +65,7 @@ public class SchoolInfo implements Serializable {
 
     private String schoolGate;
 
-    private int schoolHot;
+    private Integer schoolHot;
 
     private static final long serialVersionUID = 1L;
 }
