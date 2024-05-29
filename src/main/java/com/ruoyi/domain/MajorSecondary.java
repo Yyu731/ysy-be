@@ -20,9 +20,15 @@ public class MajorSecondary implements Serializable {
 
     private String majorName;
 
+    @TableField(exist = false)
+    private String parentName;
+
     private Integer parentId;
 
     private Integer degreeType;
+
+    @TableField(exist = false)
+    private Integer majorCount;
 
     private String createBy;
 

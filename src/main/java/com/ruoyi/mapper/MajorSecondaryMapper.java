@@ -3,6 +3,8 @@ package com.ruoyi.mapper;
 import com.ruoyi.domain.MajorSecondary;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 
+import java.util.List;
+
 /**
 * @author yyu
 * @description 针对表【major_secondary】的数据库操作Mapper
@@ -11,6 +13,7 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 */
 public interface MajorSecondaryMapper extends BaseMapper<MajorSecondary> {
 
+    List<MajorSecondary> selectListByParentId(Integer majorPrimaryId);
 }
 
 

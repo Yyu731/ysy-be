@@ -1,5 +1,6 @@
 package com.ruoyi.service.impl;
 
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
@@ -28,6 +29,14 @@ public class MajorServiceImpl extends ServiceImpl<MajorMapper, Major>
     @Override
     public IPage<Major> selectTotalMajorVoList(Page<Major> page) {
         return majorMapper.selectTotalMajorVoPage(page);
+    }
+
+    @Override
+    public Page<Major> selectMajorListBySecondaryId(Page<Major> page,Integer parentId) {
+        LambdaQueryWrapper<Major> lambdaQueryWrapper = new LambdaQueryWrapper<>();
+        lambdaQueryWrapper.eq(Major::getParentId, parentId);
+        majorMapper.selectPage(page,lambdaQueryWrapper);
+        return page;
     }
 }
 

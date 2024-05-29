@@ -18,9 +18,16 @@
     </resultMap>
 
     <sql id="Base_Column_List">
-        major_secondary_id,major_code,major_name,
+        major_secondary_id
+        ,major_code,major_name,
         parent_id,degree_type,create_by,
         create_time,update_by,update_time,
         remark
     </sql>
+    <select id="selectListByParentId" resultType="com.ruoyi.domain.MajorSecondary">
+        select m1.major_secondary_id, m1.major_code, m1.major_name, m1.parent_id, m2.major_name parentName, m1.degree_type from major_secondary m1
+                 left join major_primary m2
+                 on m1.parent_id = m2.major_primary_id
+                 where m2.major_primary_id = #{majorPrimaryId}
+    </select>
 </mapper>

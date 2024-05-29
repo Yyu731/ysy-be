@@ -14,6 +14,10 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 public interface MajorMapper extends BaseMapper<Major> {
 
     IPage selectTotalMajorVoPage(Page<Major> page);
+
+    Integer selectCountByPrimaryId(Integer majorPrimaryId);
+
+    Integer selectCountBySecondaryId(Integer majorSecondaryId);
 }
 
 

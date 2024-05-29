@@ -14,6 +14,7 @@ import lombok.Data;
 @TableName(value ="major")
 @Data
 public class Major implements Serializable {
+    @TableId
     private Integer majorId;
 
     private String majorCode;

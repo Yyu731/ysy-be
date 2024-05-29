@@ -6,6 +6,8 @@ import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
+
 import lombok.Data;
 
 /**
@@ -29,6 +31,15 @@ public class MajorPrimary implements Serializable {
     private Date updateTime;
 
     private String remark;
+
+    @TableField(exist = false)
+    private List<MajorSecondary> majorSecondaryList;
+
+    @TableField(exist = false)
+    private Integer majorSecondaryCount;
+
+    @TableField(exist = false)
+    private Integer majorCount;
 
     private static final long serialVersionUID = 1L;
 }

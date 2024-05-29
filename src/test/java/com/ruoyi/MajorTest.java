@@ -47,6 +47,7 @@ public class MajorTest {
             majorPrimary.setMajorCode(object.getStr("code"));
             majorPrimary.setMajorName(object.getStr("name"));
             majorPrimary.setCreateBy("admin");
+            majorPrimary.setMajorPrimaryId(object.getInt("cnf_spe_id"));
             majorPrimary.setCreateTime(DateUtil.date());
             majorPrimaryMapper.insert(majorPrimary);
         }
@@ -63,13 +64,14 @@ public class MajorTest {
         JSONArray sencondClass = json.getJSONObject("data").getJSONArray("second_class");
         for (int i = 0; i < sencondClass.size(); i++) {
             JSONObject object = sencondClass.getJSONObject(i);
-            Integer parentId =  object.getInt("root_id") - 300;
+            Integer parentId =  object.getInt("root_id");
             MajorSecondary majorSecondary = new MajorSecondary();
             majorSecondary.setParentId(parentId);
             majorSecondary.setMajorName(object.getStr("name"));
             majorSecondary.setMajorCode(object.getStr("code"));
             majorSecondary.setDegreeType(object.getInt("degree_type"));
             majorSecondary.setCreateBy("admin");
+            majorSecondary.setMajorSecondaryId(object.getInt("cnf_spe_id"));
             majorSecondary.setCreateTime(DateUtil.date());
             majorSecondaryMapper.insert(majorSecondary);
 
@@ -91,12 +93,9 @@ public class MajorTest {
         for (int i = 0; i < array.size(); i++) {
             JSONObject object = array.getJSONObject(i);
             String level2Code = object.getStr("level2_code");
-            MajorSecondary majorSecondary = majorSecondaryMapper.selectOne(Wrappers.lambdaQuery(MajorSecondary.class).eq(MajorSecondary::getMajorCode, level2Code));
-            if(majorSecondary == null) {
-                continue;
-            }
             Major major = new Major();
-            major.setParentId(majorSecondary.getMajorSecondaryId());
+            major.setParentId(object.getInt("level2"));
+            major.setMajorId(object.getInt("spe_id"));
             major.setMajorName(object.getStr("special_name"));
             major.setMajorCode(object.getStr("code"));
             major.setCreateBy("admin");

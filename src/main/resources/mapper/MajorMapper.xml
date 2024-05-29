@@ -48,4 +48,17 @@
                  left join major_primary m3
                            on m2.parent_id = m3.major_primary_id
     </select>
+    <select id="selectCountByPrimaryId" resultType="java.lang.Integer">
+        select count(1)
+        from major m
+                 left join major_secondary m1
+                           on m.parent_id = m1.major_secondary_id
+        where m1.parent_id = #{majorPrimaryId};
+    </select>
+    <select id="selectCountBySecondaryId" resultType="java.lang.Integer">
+        select count(1)
+        from major
+        where parent_id = #{majorSecondaryId}
+    </select>
+
 </mapper>
