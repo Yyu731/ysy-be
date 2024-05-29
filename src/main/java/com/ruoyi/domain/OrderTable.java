@@ -18,7 +18,7 @@ public class OrderTable implements Serializable {
 
     private String orderNumber;
 
-    private Integer userId;
+    private Long userId;
 
     private Integer productId;
 

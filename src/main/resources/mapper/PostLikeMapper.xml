@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.mapper.PostLikeMapper">
+
+    <resultMap id="BaseResultMap" type="com.ruoyi.domain.PostLike">
+            <id property="likeId" column="like_id" jdbcType="INTEGER"/>
+            <result property="postId" column="post_id" jdbcType="INTEGER"/>
+            <result property="likerId" column="liker_id" jdbcType="BIGINT"/>
+            <result property="likeTime" column="like_time" jdbcType="TIMESTAMP"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        like_id,post_id,liker_id,
+        like_time
+    </sql>
+</mapper>
