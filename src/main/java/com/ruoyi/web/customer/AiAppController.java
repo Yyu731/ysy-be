@@ -27,9 +27,10 @@ public class AiAppController {
             @ApiParam(value = "消息参数", required = true) @RequestBody ChatRequestDTO dto) {
         try {
             String modelType="SparkDesk";
-            System.out.println(modelType);
-            System.out.println("00");
-            dto.setSystem("请你判断以上这段话中是否带有不能公开发表的侮辱性骂人言论，如果有则返回数字0，如果没有则返回数字1");
+            dto.setSystem("请你判断以上这段话中是否带有不能公开发表的侮辱性骂人言论，如果有则返回数字0，如果没有则返回数字1，只用返回一个0或者1，不要返回多余的话");
+
+//            if()
+
             return service.chatMessage(modelType, dto);
         } catch (Exception e) {
             throw new RuntimeException(e);

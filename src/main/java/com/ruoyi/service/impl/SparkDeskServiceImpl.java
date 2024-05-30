@@ -39,7 +39,7 @@ public class SparkDeskServiceImpl implements ModelService {
         sparkDeskDTO.setHeader(new SparkDeskHeaderDTO(appId));
 
         String authUrl = getAuthUrl(HOST_URL, appKey, appSecret).replace("http://", "ws://").replace("https://", "wss://");
-        System.out.println("authurlh"+authUrl);
+//        System.out.println("authurlh"+authUrl);
         Request request = new Request.Builder().url(authUrl).build();
         OkHttpClient client = new OkHttpClient.Builder().build();
         StringBuilder sb = new StringBuilder();

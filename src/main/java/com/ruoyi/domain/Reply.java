@@ -14,6 +14,7 @@ import lombok.Data;
 @TableName(value ="reply")
 @Data
 public class Reply implements Serializable {
+    @TableId(type = IdType.AUTO)
     private Integer replyId;
 
     private Long replierId;

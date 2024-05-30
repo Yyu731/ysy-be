@@ -26,8 +26,6 @@ public class AiAppServiceImpl implements IAiAppService {
     public ChatResponseVO chatMessage(String modelType, ChatRequestDTO dto) throws Exception {
         this.checkMessages(dto.getMessages());
         // 根据枚举类ModelTypeEnum中的枚举值判断模型类型，并调用对应的模型实现类的方法
-        System.out.println("modelType");
-        System.out.println(modelType);
         ModelService modelService = getModelService(modelType);
         return modelService.chatMessage(dto);
     }
