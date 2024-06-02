@@ -18,7 +18,7 @@ public interface PostService extends IService<Post> {
 
     List<TotalPostVo> getTotalPostList(List<Post> postList);
 
-    List<DetailPostVo> getDetailPostList(List<Post> postList);
+    DetailPostVo getDetailPostList(Post post);
 
     Page<Post> getPostPage(Page<Post> page, Post post);
 }

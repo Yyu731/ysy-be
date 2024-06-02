@@ -106,9 +106,7 @@ public class PostServiceImpl extends ServiceImpl<PostMapper, Post>
     }
 
     @Override
-    public List<DetailPostVo> getDetailPostList(List<Post> postList){
-        List<DetailPostVo> detailPostVos = new ArrayList<>();
-        for (Post post : postList) {
+    public DetailPostVo getDetailPostList(Post post){
             DetailPostVo detailPostVo = new DetailPostVo();
             detailPostVo.setPostId(post.getPostId());
             detailPostVo.setAuthorId(post.getAuthorId());
@@ -157,10 +155,8 @@ public class PostServiceImpl extends ServiceImpl<PostMapper, Post>
             }).collect(Collectors.toList());
 
             detailPostVo.setAllReply(replyVos);
-            detailPostVos.add(detailPostVo);
-        }
 
-        return detailPostVos;
+        return detailPostVo;
 
     }
 
