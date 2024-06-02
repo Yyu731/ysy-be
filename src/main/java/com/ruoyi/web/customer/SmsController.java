@@ -39,7 +39,7 @@ public class SmsController {
     // 生成随机验证码的方法，你可以根据自己的需求实现
     private int generateVerificationCode() {
         // 实现你的验证码生成逻辑
-        return 1234; // 这里只是一个示例，实际应用中需要根据实际情况生成验证码
+        return 307014; // 这里只是一个示例，实际应用中需要根据实际情况生成验证码
     }
 }
 

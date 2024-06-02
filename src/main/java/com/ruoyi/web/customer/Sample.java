@@ -11,6 +11,7 @@ public class Sample {
 
     /**
      * 使用AK&SK初始化账号Client
+     *
      * @return Client
      * @throws Exception
      */
@@ -39,14 +40,14 @@ public class Sample {
         String accessKeyId = "";
         String accessKeySecret = "";
 //        com.aliyun.dysmsapi20170525.Client client = createClient(accessKeyId, accessKeySecret);
-        int code=7834;
+        int code = 7834;
 
         com.aliyun.dysmsapi20170525.Client client = Sample.createClient(accessKeyId, accessKeySecret);
         com.aliyun.dysmsapi20170525.models.SendSmsRequest sendSmsRequest = new com.aliyun.dysmsapi20170525.models.SendSmsRequest()
                 .setSignName("研学园")
                 .setTemplateCode("SMS_467415418")
                 .setPhoneNumbers("13579030102")
-                .setTemplateParam("{\"code\":\""+code+"\"}");
+                .setTemplateParam("{\"code\":\"" + code + "\"}");
 //                .setTemplateParam("{\"code\":\"1234\"}");
         com.aliyun.teautil.models.RuntimeOptions runtime = new com.aliyun.teautil.models.RuntimeOptions();
         try {
@@ -72,4 +73,4 @@ public class Sample {
             com.aliyun.teautil.Common.assertAsString(error.message);
         }
     }
-
+}
