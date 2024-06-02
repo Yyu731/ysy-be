@@ -142,14 +142,13 @@ public class PostServiceImpl extends ServiceImpl<PostMapper, Post>
                     .eq(Collect::getUserId, loginUser.getUserId())) == null ? 0 : 1);
             detailPostVo.setLikeStatus(postLikeService.getOne(Wrappers.lambdaQuery(PostLike.class)
                     .eq(PostLike::getLikerId, loginUser.getUserId())) == null ? 0 : 1);
-            System.out.println("777");
         } catch (ServiceException e) {
             detailPostVo.setCollectStatus(0);
             detailPostVo.setLikeStatus(0);
-            System.out.println("888");
         }
         List<Reply> replies = replyService.list(Wrappers.lambdaQuery(Reply.class)
-                .eq(Reply::getPostId, post.getPostId()));
+                .eq(Reply::getPostId, post.getPostId())
+                .orderByDesc(Reply::getReplyTime));
 
         List<ReplyVo> replyVos = replies.stream().map(reply -> {
             ReplyVo replyVo = new ReplyVo();
