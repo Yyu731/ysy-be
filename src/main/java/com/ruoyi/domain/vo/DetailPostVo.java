@@ -24,7 +24,7 @@ public class DetailPostVo implements Serializable {
 
 //    private String reviewStatus;
 
-    private String postType;
+    private Integer postType;
 
     private String headPortrait;
 

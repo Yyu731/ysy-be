@@ -3,6 +3,8 @@ package com.ruoyi.mapper;
 import com.ruoyi.domain.Reply;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 
+import java.util.List;
+
 /**
 * @author ASUS
 * @description 针对表【reply】的数据库操作Mapper
@@ -11,6 +13,7 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 */
 public interface ReplyMapper extends BaseMapper<Reply> {
 
+    List<Reply> selectReplyListByTopicId(Long id);
 }
 
 

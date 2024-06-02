@@ -3,6 +3,7 @@ package com.ruoyi.web.customer;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.ruoyi.common.core.controller.BaseController;
+import com.ruoyi.common.core.domain.AjaxResult;
 import com.ruoyi.common.core.page.TableDataInfo;
 import com.ruoyi.domain.SchoolInfo;
 import com.ruoyi.domain.vo.BriefSchoolVo;
@@ -48,14 +49,8 @@ public class SchoolController extends BaseController {
         return getDataTable(totalSchoolVoList);
     }
 
-    @GetMapping("/detaillist")
-    public TableDataInfo detaillist() {
-        Page<SchoolInfo> page = getPage();
-        schoolInfoService.page(page);
-        //10条记录里
-        List<SchoolInfo> records = page.getRecords();
-
-        List<DetailSchoolVo> detailSchoolVoList = schoolInfoService.getDetailSchoolList(records);
-        return getDataTable(detailSchoolVoList);
+    @GetMapping("/detail")
+    public AjaxResult detaillist(SchoolInfo schoolInfo) {
+       return success(schoolInfoService.getDetailSchoolVo(schoolInfoService.getById(schoolInfo.getSchoolId())));
     }
 }

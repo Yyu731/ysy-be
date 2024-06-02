@@ -120,58 +120,53 @@ public class SchoolInfoServiceImpl extends ServiceImpl<SchoolInfoMapper, SchoolI
     }
 
     @Override
-    public List<DetailSchoolVo> getDetailSchoolList(List<SchoolInfo> schoolInfList) {
-        List<DetailSchoolVo> detailSchoolVos = new ArrayList<>();
-        for (SchoolInfo schoolInfo : schoolInfList) {
-            DetailSchoolVo detailSchoolVo = new DetailSchoolVo();
-            detailSchoolVo.setSchoolId(schoolInfo.getSchoolId());
-            detailSchoolVo.setSchoolName(schoolInfo.getSchoolName());
-            detailSchoolVo.setSchoolBadge(schoolInfo.getSchoolBadge());
-            detailSchoolVo.setProvince(schoolProvinceService.getById(schoolInfo.getProvinceId()).getRegionName());
-            detailSchoolVo.setSchoolType(schoolTypeService.getById(schoolInfo.getSchoolTypeId()).getTypeName());
-            detailSchoolVo.setIntro(schoolInfo.getIntro());
-            detailSchoolVo.setSchoolAddress(schoolInfo.getSchoolAddress());
-            detailSchoolVo.setCreateDate(schoolInfo.getCreateDate());
-            detailSchoolVo.setSchoolEmail(schoolInfo.getSchoolEmail());
-            detailSchoolVo.setSchoolPhone(schoolInfo.getSchoolPhone());
-            detailSchoolVo.setSchoolSite(schoolInfo.getSchoolSite());
-            detailSchoolVo.setSchoolSpace(schoolInfo.getSchoolSpace());
-            detailSchoolVo.setNumMaster(schoolInfo.getNumMaster());
-            detailSchoolVo.setNumDoctor(schoolInfo.getNumDoctor());
-            detailSchoolVo.setNumLab(schoolInfo.getNumLab());
-            detailSchoolVo.setNumSubject(schoolInfo.getNumSubject());
+    public DetailSchoolVo getDetailSchoolVo(SchoolInfo schoolInfo) {
+        DetailSchoolVo detailSchoolVo = new DetailSchoolVo();
+        detailSchoolVo.setSchoolId(schoolInfo.getSchoolId());
+        detailSchoolVo.setSchoolName(schoolInfo.getSchoolName());
+        detailSchoolVo.setSchoolBadge(schoolInfo.getSchoolBadge());
+        detailSchoolVo.setProvince(schoolProvinceService.getById(schoolInfo.getProvinceId()).getRegionName());
+        detailSchoolVo.setSchoolType(schoolTypeService.getById(schoolInfo.getSchoolTypeId()).getTypeName());
+        detailSchoolVo.setIntro(schoolInfo.getIntro());
+        detailSchoolVo.setSchoolAddress(schoolInfo.getSchoolAddress());
+        detailSchoolVo.setCreateDate(schoolInfo.getCreateDate());
+        detailSchoolVo.setSchoolEmail(schoolInfo.getSchoolEmail());
+        detailSchoolVo.setSchoolPhone(schoolInfo.getSchoolPhone());
+        detailSchoolVo.setSchoolSite(schoolInfo.getSchoolSite());
+        detailSchoolVo.setSchoolSpace(schoolInfo.getSchoolSpace());
+        detailSchoolVo.setNumMaster(schoolInfo.getNumMaster());
+        detailSchoolVo.setNumDoctor(schoolInfo.getNumDoctor());
+        detailSchoolVo.setNumLab(schoolInfo.getNumLab());
+        detailSchoolVo.setNumSubject(schoolInfo.getNumSubject());
 //            detailSchoolVo.setQSrank(rankingService.getById(schoolInfo.getProvinceId()).getRanking());
-            Ranking ranking = rankingService.getOne(Wrappers.<Ranking>lambdaQuery()
-                    .eq(Ranking::getSchoolId, schoolInfo.getSchoolId()));
-            if (ranking != null) {
-                detailSchoolVo.setQSrank(ranking.getRanking());
-            } else {
-                detailSchoolVo.setQSrank("未排名");
-            }
-            List<SchoolLevel> schoolLevel = schoolLevelService.list(Wrappers.<SchoolLevel>lambdaQuery()
-                    .in(SchoolLevel::getSchoolFeatureId, 5, 6)
-                    .eq(SchoolLevel::getSchoolId, schoolInfo.getSchoolId())
-            );
-            for (SchoolLevel schoolLevel1 : schoolLevel) {
-                detailSchoolVo.setTypeFeatures(schoolLevel1.getFeatureName());
-            }
-            detailSchoolVo.setFeatures(
-                    schoolLevelService.list(
-                                    Wrappers.lambdaQuery(SchoolLevel.class)
-                                            .in(SchoolLevel::getSchoolFeatureId, 1, 2, 3, 4)
-                                            .eq(SchoolLevel::getSchoolId, schoolInfo.getSchoolId()))
-                            .stream().map(item -> item.getFeatureName()).limit(3)
-                            .collect(Collectors.toList()));
-            detailSchoolVo.setSchoolPic(schoolPicService.list(
-                            Wrappers.lambdaQuery(SchoolPic.class)
-                                    .eq(SchoolPic::getSchoolId, schoolInfo.getSchoolId()))
-                    .stream().map(item -> item.getImageUrl())
-                    .collect(Collectors.toList())
-            );
-            detailSchoolVos.add(detailSchoolVo);
+        Ranking ranking = rankingService.getOne(Wrappers.<Ranking>lambdaQuery()
+                .eq(Ranking::getSchoolId, schoolInfo.getSchoolId()));
+        if (ranking != null) {
+            detailSchoolVo.setQSrank(ranking.getRanking());
+        } else {
+            detailSchoolVo.setQSrank("未排名");
         }
-
-        return detailSchoolVos;
+        List<SchoolLevel> schoolLevel = schoolLevelService.list(Wrappers.<SchoolLevel>lambdaQuery()
+                .in(SchoolLevel::getSchoolFeatureId, 5, 6)
+                .eq(SchoolLevel::getSchoolId, schoolInfo.getSchoolId())
+        );
+        for (SchoolLevel schoolLevel1 : schoolLevel) {
+            detailSchoolVo.setTypeFeatures(schoolLevel1.getFeatureName());
+        }
+        detailSchoolVo.setFeatures(
+                schoolLevelService.list(
+                                Wrappers.lambdaQuery(SchoolLevel.class)
+                                        .in(SchoolLevel::getSchoolFeatureId, 1, 2, 3, 4)
+                                        .eq(SchoolLevel::getSchoolId, schoolInfo.getSchoolId()))
+                        .stream().map(item -> item.getFeatureName()).limit(3)
+                        .collect(Collectors.toList()));
+        detailSchoolVo.setSchoolPic(schoolPicService.list(
+                        Wrappers.lambdaQuery(SchoolPic.class)
+                                .eq(SchoolPic::getSchoolId, schoolInfo.getSchoolId()))
+                .stream().map(item -> item.getImageUrl())
+                .collect(Collectors.toList())
+        );
+        return detailSchoolVo;
     }
 //    @Override
 //    public Page getPage(Page<SchoolInfo> page, TotalSchoolDto totalSchoolDto) {
@@ -239,7 +234,7 @@ public class SchoolInfoServiceImpl extends ServiceImpl<SchoolInfoMapper, SchoolI
     public int insertSchoolInfo(SchoolInfo schoolInfo) {
         schoolInfo.setCreateTime(DateUtil.date());
         schoolInfo.setCreateBy(SecurityUtils.getUsername());
-        int res =  schoolInfoMapper.insert(schoolInfo);
+        int res = schoolInfoMapper.insert(schoolInfo);
 
         for (Integer schoolFeatureId : schoolInfo.getSchoolFeatureIds()) {
             SchoolLevel schoolLevel = new SchoolLevel();

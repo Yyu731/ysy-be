@@ -1,6 +1,7 @@
 package com.ruoyi.service.impl;
 
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.ruoyi.common.core.domain.model.LoginUser;
 import com.ruoyi.common.exception.ServiceException;
@@ -35,6 +36,9 @@ public class PostServiceImpl extends ServiceImpl<PostMapper, Post>
     private PostLikeService postLikeService;
     @Autowired
     private CollectService collectService;
+
+    @Autowired
+    private PostMapper postMapper;
 
     @Override
     public List<HotPostVo> getHotPostList(List<Post> postList) {
@@ -158,6 +162,14 @@ public class PostServiceImpl extends ServiceImpl<PostMapper, Post>
 
         return detailPostVos;
 
+    }
+
+    @Override
+    public Page<Post> getPostPage(Page<Post> page, Post post) {
+
+        postMapper.selectPostPage(page,post);
+
+        return page;
     }
 }
 

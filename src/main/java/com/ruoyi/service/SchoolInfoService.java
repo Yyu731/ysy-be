@@ -21,7 +21,7 @@ public interface SchoolInfoService extends IService<SchoolInfo> {
 
     List<TotalSchoolVo> getTotalSchoolList(List<SchoolInfo> schoolInfList);
 
-    List<DetailSchoolVo> getDetailSchoolList(List<SchoolInfo> schoolInfList);
+    DetailSchoolVo getDetailSchoolVo(SchoolInfo schoolInfo);
 
 //    Page getPage(Page<SchoolInfo> page, TotalSchoolDto totalSchoolDto);
 

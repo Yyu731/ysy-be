@@ -4,7 +4,10 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.ruoyi.domain.Reply;
 import com.ruoyi.service.ReplyService;
 import com.ruoyi.mapper.ReplyMapper;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 /**
 * @author ASUS
@@ -15,6 +18,13 @@ import org.springframework.stereotype.Service;
 public class ReplyServiceImpl extends ServiceImpl<ReplyMapper, Reply>
     implements ReplyService{
 
+    @Autowired
+    private ReplyMapper replyMapper;
+
+    @Override
+    public List<Reply> getReplyListByPostId(Long id) {
+        return replyMapper.selectReplyListByTopicId(id);
+    }
 }
 
 

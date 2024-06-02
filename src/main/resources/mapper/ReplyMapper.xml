@@ -17,4 +17,13 @@
         reply_id,replier_id,post_id,
         reply_content,reply_time,ip_address
     </sql>
+
+    <select id="selectReplyListByTopicId" resultType="com.ruoyi.domain.Reply">
+        select r.*,
+               u.user_name user_name
+        from reply r
+                 left join sys_user u
+                           on r.replier_id = u.user_id
+        where post_id = #{id}
+    </select>
 </mapper>

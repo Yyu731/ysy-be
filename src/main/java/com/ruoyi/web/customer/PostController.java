@@ -26,8 +26,7 @@ public class PostController extends BaseController {
         Page<Post> page = getPage();
         System.out.println(page.toString());
         postService.page(page, Wrappers.lambdaQuery(Post.class)
-                .in(Post::getPostId,1,2,3)
-                .eq(Post::getReviewStatus,"Accepted" ));
+                .eq(Post::getReviewStatus,1));
 
         //10条记录里
         List<Post> records = page.getRecords();
@@ -41,7 +40,7 @@ public class PostController extends BaseController {
         System.out.println(page.toString());
 //        postService.page(page);
         postService.page(page, Wrappers.lambdaQuery(Post.class)
-                .eq(Post::getReviewStatus,"Accepted" ));
+                .eq(Post::getReviewStatus,1));
         //10条记录里
         List<Post> records = page.getRecords();
 
@@ -55,7 +54,7 @@ public class PostController extends BaseController {
         System.out.println(page.toString());
 //        postService.page(page);
         postService.page(page, Wrappers.lambdaQuery(Post.class)
-                .eq(Post::getReviewStatus,"Accepted" ));
+                .eq(Post::getReviewStatus,1));
         //10条记录里
         List<Post> records = page.getRecords();
 
