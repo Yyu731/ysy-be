@@ -8,9 +8,12 @@ import com.ruoyi.common.exception.ServiceException;
 import com.ruoyi.common.utils.SecurityUtils;
 import com.ruoyi.common.utils.bean.BeanUtils;
 import com.ruoyi.domain.*;
-import com.ruoyi.domain.vo.*;
-import com.ruoyi.service.*;
+import com.ruoyi.domain.vo.DetailPostVo;
+import com.ruoyi.domain.vo.HotPostVo;
+import com.ruoyi.domain.vo.ReplyVo;
+import com.ruoyi.domain.vo.TotalPostVo;
 import com.ruoyi.mapper.PostMapper;
+import com.ruoyi.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -89,9 +92,11 @@ public class PostServiceImpl extends ServiceImpl<PostMapper, Post>
             try {
                 LoginUser loginUser = SecurityUtils.getLoginUser();
                 totalPostVo.setCollectStatus(collectService.getOne(Wrappers.lambdaQuery(Collect.class)
-                        .eq(Collect::getUserId, loginUser.getUserId())) == null? 0: 1);
+                        .eq(Collect::getPostId, post.getPostId())
+                        .eq(Collect::getUserId, loginUser.getUserId())) == null ? 0 : 1);
                 totalPostVo.setLikeStatus(postLikeService.getOne(Wrappers.lambdaQuery(PostLike.class)
-                        .eq(PostLike::getLikerId, loginUser.getUserId())) == null? 0: 1);
+                        .eq(PostLike::getPostId, post.getPostId())
+                        .eq(PostLike::getLikerId, loginUser.getUserId())) == null ? 0 : 1);
                 System.out.println("777");
             } catch (ServiceException e) {
                 totalPostVo.setCollectStatus(0);
@@ -106,55 +111,55 @@ public class PostServiceImpl extends ServiceImpl<PostMapper, Post>
     }
 
     @Override
-    public DetailPostVo getDetailPost(Post post){
-            DetailPostVo detailPostVo = new DetailPostVo();
-            detailPostVo.setPostId(post.getPostId());
-            detailPostVo.setAuthorId(post.getAuthorId());
-            detailPostVo.setTitle(post.getTitle());
-            detailPostVo.setContent(post.getContent());
-            detailPostVo.setPostTime(post.getPostTime());
-            detailPostVo.setPostType(post.getPostType());
-            detailPostVo.setNickName(sysUserService.getById(post.getAuthorId()).getNickName());
-            detailPostVo.setHeadPortrait(sysUserService.getById(post.getAuthorId()).getAvatar());
-            detailPostVo.setPostImages(
-                    postImagesService.list(
-                                    Wrappers.lambdaQuery(PostImages.class)
-                                            .eq(PostImages::getPostId, post.getPostId()))
-                            .stream().map(item -> item.getImageUrl()).limit(9)
-                            .collect(Collectors.toList()));
-            detailPostVo.setReviewNum(replyService.list(
-                    Wrappers.lambdaQuery(Reply.class)
-                            .eq(Reply::getPostId, post.getPostId())).size());
-            detailPostVo.setLikeNum(postLikeService.list(
-                    Wrappers.lambdaQuery(PostLike.class)
-                            .eq(PostLike::getPostId, post.getPostId())).size());
-            detailPostVo.setCollectNum(collectService.list(
-                    Wrappers.lambdaQuery(Collect.class)
-                            .eq(Collect::getPostId, post.getPostId())).size());
-            try {
-                LoginUser loginUser = SecurityUtils.getLoginUser();
-                detailPostVo.setCollectStatus(collectService.getOne(Wrappers.lambdaQuery(Collect.class)
-                        .eq(Collect::getUserId, loginUser.getUserId())) == null? 0: 1);
-                detailPostVo.setLikeStatus(postLikeService.getOne(Wrappers.lambdaQuery(PostLike.class)
-                        .eq(PostLike::getLikerId, loginUser.getUserId())) == null? 0: 1);
-                System.out.println("777");
-            } catch (ServiceException e) {
-                detailPostVo.setCollectStatus(0);
-                detailPostVo.setLikeStatus(0);
-                System.out.println("888");
-            }
-            List<Reply> replies=replyService.list(Wrappers.lambdaQuery(Reply.class)
-                    .eq(Reply::getPostId, post.getPostId()));
+    public DetailPostVo getDetailPost(Post post) {
+        DetailPostVo detailPostVo = new DetailPostVo();
+        detailPostVo.setPostId(post.getPostId());
+        detailPostVo.setAuthorId(post.getAuthorId());
+        detailPostVo.setTitle(post.getTitle());
+        detailPostVo.setContent(post.getContent());
+        detailPostVo.setPostTime(post.getPostTime());
+        detailPostVo.setPostType(post.getPostType());
+        detailPostVo.setNickName(sysUserService.getById(post.getAuthorId()).getNickName());
+        detailPostVo.setHeadPortrait(sysUserService.getById(post.getAuthorId()).getAvatar());
+        detailPostVo.setPostImages(
+                postImagesService.list(
+                                Wrappers.lambdaQuery(PostImages.class)
+                                        .eq(PostImages::getPostId, post.getPostId()))
+                        .stream().map(item -> item.getImageUrl()).limit(9)
+                        .collect(Collectors.toList()));
+        detailPostVo.setReviewNum(replyService.list(
+                Wrappers.lambdaQuery(Reply.class)
+                        .eq(Reply::getPostId, post.getPostId())).size());
+        detailPostVo.setLikeNum(postLikeService.list(
+                Wrappers.lambdaQuery(PostLike.class)
+                        .eq(PostLike::getPostId, post.getPostId())).size());
+        detailPostVo.setCollectNum(collectService.list(
+                Wrappers.lambdaQuery(Collect.class)
+                        .eq(Collect::getPostId, post.getPostId())).size());
+        try {
+            LoginUser loginUser = SecurityUtils.getLoginUser();
+            detailPostVo.setCollectStatus(collectService.getOne(Wrappers.lambdaQuery(Collect.class)
+                    .eq(Collect::getUserId, loginUser.getUserId())) == null ? 0 : 1);
+            detailPostVo.setLikeStatus(postLikeService.getOne(Wrappers.lambdaQuery(PostLike.class)
+                    .eq(PostLike::getLikerId, loginUser.getUserId())) == null ? 0 : 1);
+            System.out.println("777");
+        } catch (ServiceException e) {
+            detailPostVo.setCollectStatus(0);
+            detailPostVo.setLikeStatus(0);
+            System.out.println("888");
+        }
+        List<Reply> replies = replyService.list(Wrappers.lambdaQuery(Reply.class)
+                .eq(Reply::getPostId, post.getPostId()));
 
-            List<ReplyVo> replyVos = replies.stream().map(reply -> {
-                ReplyVo replyVo = new ReplyVo();
-                BeanUtils.copyProperties(reply, replyVo);
-                replyVo.setLikeStatus(1);
-                replyVo.setLikeNum(100);
-                return replyVo;
-            }).collect(Collectors.toList());
+        List<ReplyVo> replyVos = replies.stream().map(reply -> {
+            ReplyVo replyVo = new ReplyVo();
+            BeanUtils.copyProperties(reply, replyVo);
+            replyVo.setLikeStatus(1);
+            replyVo.setLikeNum(100);
+            return replyVo;
+        }).collect(Collectors.toList());
 
-            detailPostVo.setAllReply(replyVos);
+        detailPostVo.setAllReply(replyVos);
 
         return detailPostVo;
 
@@ -163,7 +168,7 @@ public class PostServiceImpl extends ServiceImpl<PostMapper, Post>
     @Override
     public Page<Post> getPostPage(Page<Post> page, Post post) {
 
-        postMapper.selectPostPage(page,post);
+        postMapper.selectPostPage(page, post);
 
         return page;
     }
