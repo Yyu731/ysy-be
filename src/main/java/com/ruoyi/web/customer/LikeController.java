@@ -1,5 +1,6 @@
 package com.ruoyi.web.customer;
 
+import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.ruoyi.common.core.controller.BaseController;
 import com.ruoyi.common.core.domain.AjaxResult;
 import com.ruoyi.common.exception.ServiceException;
@@ -37,31 +38,45 @@ public class LikeController extends BaseController {
     public AjaxResult addPost(@RequestBody PostLike postLike) {
         //                LoginUser loginUser = SecurityUtils.getLoginUser();
 //                postLike.setLikerId(loginUser.getUserId());
-
         postLike.setLikerId(1l);
-        LocalDateTime currentDateTime = LocalDateTime.now(ZoneId.of("GMT+8"));
 
-        // 将 LocalDateTime 转换为 Date 类型
-        Date currentDate = Date.from(currentDateTime.atZone(ZoneId.of("GMT+8")).toInstant());
+        if(postLikeService.getOne(Wrappers.lambdaQuery(PostLike.class).eq(PostLike::getPostId,postLike.getPostId())
+                .eq(PostLike::getLikerId,postLike.getLikerId()))==null){
+            LocalDateTime currentDateTime = LocalDateTime.now(ZoneId.of("GMT+8"));
 
-        postLike.setLikeTime(currentDate);
-        postLikeService.save(postLike);
+            // 将 LocalDateTime 转换为 Date 类型
+            Date currentDate = Date.from(currentDateTime.atZone(ZoneId.of("GMT+8")).toInstant());
+
+            postLike.setLikeTime(currentDate);
+            postLikeService.save(postLike);
+        }else{
+            postLikeService.remove(Wrappers.lambdaQuery(PostLike.class).eq(PostLike::getPostId,postLike.getPostId())
+                    .eq(PostLike::getLikerId,postLike.getLikerId()));
+        }
         return success();
     }
+
+
 
     @PostMapping("/addreply")
     public AjaxResult addReply(@RequestBody ReplyLike replyLike) {
         //                LoginUser loginUser = SecurityUtils.getLoginUser();
-//                postLike.setLikerId(loginUser.getUserId());
+//                replyLike.setLikerId(loginUser.getUserId());
 
         replyLike.setLikerId(1l);
-        LocalDateTime currentDateTime = LocalDateTime.now(ZoneId.of("GMT+8"));
+        if(replyLikeService.getOne(Wrappers.lambdaQuery(ReplyLike.class).eq(ReplyLike::getReplyId,replyLike.getReplyId())
+                .eq(ReplyLike::getLikerId,replyLike.getLikerId()))==null){
+            LocalDateTime currentDateTime = LocalDateTime.now(ZoneId.of("GMT+8"));
 
-        // 将 LocalDateTime 转换为 Date 类型
-        Date currentDate = Date.from(currentDateTime.atZone(ZoneId.of("GMT+8")).toInstant());
+            // 将 LocalDateTime 转换为 Date 类型
+            Date currentDate = Date.from(currentDateTime.atZone(ZoneId.of("GMT+8")).toInstant());
 
-        replyLike.setLikeTime(currentDate);
-        replyLikeService.save(replyLike);
+            replyLike.setLikeTime(currentDate);
+            replyLikeService.save(replyLike);
+        }else{
+            replyLikeService.remove(Wrappers.lambdaQuery(ReplyLike.class).eq(ReplyLike::getReplyId,replyLike.getReplyId())
+                    .eq(ReplyLike::getLikerId,replyLike.getLikerId()));
+        }
         return success();
     }
 

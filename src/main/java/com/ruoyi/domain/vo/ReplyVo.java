@@ -22,5 +22,9 @@ public class ReplyVo  implements Serializable {
 
     private Integer likeStatus;
 
+    private String nickName;
+
+    private String headPortrait;
+
     private static final long serialVersionUID = 1L;
 }

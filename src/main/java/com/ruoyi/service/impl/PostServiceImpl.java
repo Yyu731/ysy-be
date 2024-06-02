@@ -97,13 +97,10 @@ public class PostServiceImpl extends ServiceImpl<PostMapper, Post>
                 totalPostVo.setLikeStatus(postLikeService.getOne(Wrappers.lambdaQuery(PostLike.class)
                         .eq(PostLike::getPostId, post.getPostId())
                         .eq(PostLike::getLikerId, loginUser.getUserId())) == null ? 0 : 1);
-                System.out.println("777");
             } catch (ServiceException e) {
                 totalPostVo.setCollectStatus(0);
                 totalPostVo.setLikeStatus(0);
-                System.out.println("888");
             }
-            System.out.println("999");
             totalPostVos.add(totalPostVo);
         }
 
@@ -155,6 +152,8 @@ public class PostServiceImpl extends ServiceImpl<PostMapper, Post>
             BeanUtils.copyProperties(reply, replyVo);
             replyVo.setLikeStatus(1);
             replyVo.setLikeNum(100);
+            replyVo.setNickName(sysUserService.getById(replyVo.getReplierId()).getNickName());
+            replyVo.setHeadPortrait(sysUserService.getById(replyVo.getReplierId()).getAvatar());
             return replyVo;
         }).collect(Collectors.toList());
 
