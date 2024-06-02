@@ -3,7 +3,6 @@ package com.ruoyi.service;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.ruoyi.domain.Post;
 import com.baomidou.mybatisplus.extension.service.IService;
-import com.ruoyi.domain.SchoolInfo;
 import com.ruoyi.domain.vo.*;
 
 import java.util.List;
@@ -18,7 +17,7 @@ public interface PostService extends IService<Post> {
 
     List<TotalPostVo> getTotalPostList(List<Post> postList);
 
-    DetailPostVo getDetailPostList(Post post);
+    DetailPostVo getDetailPost(Post post);
 
     Page<Post> getPostPage(Page<Post> page, Post post);
 }

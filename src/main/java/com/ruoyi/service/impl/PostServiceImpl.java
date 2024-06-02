@@ -106,7 +106,7 @@ public class PostServiceImpl extends ServiceImpl<PostMapper, Post>
     }
 
     @Override
-    public DetailPostVo getDetailPostList(Post post){
+    public DetailPostVo getDetailPost(Post post){
             DetailPostVo detailPostVo = new DetailPostVo();
             detailPostVo.setPostId(post.getPostId());
             detailPostVo.setAuthorId(post.getAuthorId());
