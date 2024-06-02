@@ -14,6 +14,7 @@ import lombok.Data;
 @TableName(value ="post_like")
 @Data
 public class PostLike implements Serializable {
+    @TableId(type = IdType.AUTO)
     private Integer likeId;
 
     private Integer postId;
