@@ -52,9 +52,9 @@ public class UserIMServiceImpl implements IUserIMServece {
     private static final String BASE_URL = "https://console.tim.qq.com";
 
     @Override
-    public Map createAccount(Long userId) {
-        SysUser sysUser = sysUserMapper.selectOne(Wrappers.lambdaQuery(SysUser.class).eq(SysUser::getUserId, userId));
-        String account = "user_" + userId;
+    public Map createAccount(String username) {
+        SysUser sysUser = sysUserMapper.selectOne(Wrappers.lambdaQuery(SysUser.class).eq(SysUser::getUserName, username));
+        String account = "user_" + username;
         String nickname = sysUser.getNickName();
         String userSig = new TLSSigAPIv2(sdkAppId, secretKey).genUserSig(account, 180 * 86400);
 
@@ -91,7 +91,7 @@ public class UserIMServiceImpl implements IUserIMServece {
         if ("Imported".equals(accountStatus)) {
             int rows = sysUserMapper.updateById(sysUser);
             if (rows == 0) {
-                log.error("无法更新客户账号登录时间，账户ID：", userId);
+                log.error("无法更新客户账号登录时间，账户ID：", username);
                 throw new BaseException("客服系统异常");
             }
             this.sendWelcomeMessage(account);
@@ -156,7 +156,7 @@ public class UserIMServiceImpl implements IUserIMServece {
 
         int rows = sysUserMapper.updateById(sysUser);
         if (rows == 0) {
-            log.error("无法更新客户账号登录时间，账户ID：", userId);
+            log.error("无法更新客户账号登录时间，账户ID：", username);
             throw new BaseException("客服系统异常");
         }
 

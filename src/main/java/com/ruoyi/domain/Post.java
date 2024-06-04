@@ -9,6 +9,8 @@ import java.util.Date;
 import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import lombok.Data;
 
 /**
@@ -20,6 +22,7 @@ public class Post implements Serializable {
     @TableId(type = IdType.AUTO)
     private Integer postId;
 
+//    @JsonSerialize(using = ToStringSerializer.class)
     private Long authorId;
 
     @TableField(exist = false)

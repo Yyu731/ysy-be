@@ -29,7 +29,7 @@
     <select id="selectPostPage" resultMap="BaseResultMap">
         select t_post_lcr.*, i.image_url, i.image_id
         from (select p.*,
-                    u.user_name,
+                     u.user_name,
                      count(distinct l.like_id)    like_count,
                      count(distinct c.collect_id) collect_count,
                      count(distinct r.reply_id)   reply_count
@@ -40,9 +40,10 @@
                                  on p.post_id = c.post_id
                        left join reply r
                                  on p.post_id = r.post_id
-                        left join sys_user u
-              on p.author_id = u.user_id
-              group by p.post_id) t_post_lcr
+                       left join sys_user u
+                                 on p.author_id = u.user_id
+              group by p.post_id
+                  limit #{offset},#{size}) t_post_lcr
                  left join post_images i
                            on t_post_lcr.post_id = i.post_id
     </select>

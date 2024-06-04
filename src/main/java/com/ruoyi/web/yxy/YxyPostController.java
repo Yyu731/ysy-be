@@ -32,7 +32,11 @@ public class YxyPostController extends BaseController {
     @GetMapping("list")
     public TableDataInfo list(Post post) {
         Page<Post> page = getPage();
-        return getDataTable(postService.getPostPage(page, post));
+        Long offset = ((page.getCurrent() - 1) * page.getSize());
+        Long pageSize = page.getSize();
+        page.setRecords(postService.getPostPage(offset, pageSize, post));
+        page.setTotal(postService.count());
+        return getDataTable(page);
     }
 
     @PreAuthorize("hasAuthority('yxy:post:edit')")

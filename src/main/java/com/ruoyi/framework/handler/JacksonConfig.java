@@ -17,7 +17,7 @@ import org.springframework.http.converter.json.Jackson2ObjectMapperBuilder;
  * @Create 2023-12-23 0:42
  * @Version 1.0
  */
-//@Configuration
+@Configuration
 public class JacksonConfig {
     @Bean
     public ObjectMapper jacksonObjectMapper(Jackson2ObjectMapperBuilder builder) {

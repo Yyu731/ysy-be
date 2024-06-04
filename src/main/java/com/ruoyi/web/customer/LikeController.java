@@ -3,17 +3,12 @@ package com.ruoyi.web.customer;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.ruoyi.common.core.controller.BaseController;
 import com.ruoyi.common.core.domain.AjaxResult;
-import com.ruoyi.common.exception.ServiceException;
+import com.ruoyi.common.core.domain.model.LoginUser;
+import com.ruoyi.common.utils.SecurityUtils;
 import com.ruoyi.domain.PostLike;
-import com.ruoyi.domain.Reply;
 import com.ruoyi.domain.ReplyLike;
-import com.ruoyi.dto.ChatRequestDTO;
-import com.ruoyi.dto.ChatResponseVO;
-import com.ruoyi.dto.MessageDTO;
-import com.ruoyi.service.IAiAppService;
 import com.ruoyi.service.PostLikeService;
 import com.ruoyi.service.ReplyLikeService;
-import com.ruoyi.service.ReplyService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -22,9 +17,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.time.LocalDateTime;
 import java.time.ZoneId;
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
+
 @RestController
 @RequestMapping("customer/like")
 public class LikeController extends BaseController {
@@ -36,12 +30,12 @@ public class LikeController extends BaseController {
 
     @PostMapping("/add")
     public AjaxResult addPost(@RequestBody PostLike postLike) {
-        //                LoginUser loginUser = SecurityUtils.getLoginUser();
-//                postLike.setLikerId(loginUser.getUserId());
-        postLike.setLikerId(1l);
+        LoginUser loginUser = SecurityUtils.getLoginUser();
+        postLike.setLikerId(loginUser.getUserId());
+//        postLike.setLikerId(1l);
 
-        if(postLikeService.getOne(Wrappers.lambdaQuery(PostLike.class).eq(PostLike::getPostId,postLike.getPostId())
-                .eq(PostLike::getLikerId,postLike.getLikerId()))==null){
+        if (postLikeService.getOne(Wrappers.lambdaQuery(PostLike.class).eq(PostLike::getPostId, postLike.getPostId())
+                .eq(PostLike::getLikerId, postLike.getLikerId())) == null) {
             LocalDateTime currentDateTime = LocalDateTime.now(ZoneId.of("GMT+8"));
 
             // 将 LocalDateTime 转换为 Date 类型
@@ -49,13 +43,12 @@ public class LikeController extends BaseController {
 
             postLike.setLikeTime(currentDate);
             postLikeService.save(postLike);
-        }else{
-            postLikeService.remove(Wrappers.lambdaQuery(PostLike.class).eq(PostLike::getPostId,postLike.getPostId())
-                    .eq(PostLike::getLikerId,postLike.getLikerId()));
+        } else {
+            postLikeService.remove(Wrappers.lambdaQuery(PostLike.class).eq(PostLike::getPostId, postLike.getPostId())
+                    .eq(PostLike::getLikerId, postLike.getLikerId()));
         }
         return success();
     }
-
 
 
     @PostMapping("/addreply")
@@ -64,8 +57,8 @@ public class LikeController extends BaseController {
 //                replyLike.setLikerId(loginUser.getUserId());
 
         replyLike.setLikerId(1l);
-        if(replyLikeService.getOne(Wrappers.lambdaQuery(ReplyLike.class).eq(ReplyLike::getReplyId,replyLike.getReplyId())
-                .eq(ReplyLike::getLikerId,replyLike.getLikerId()))==null){
+        if (replyLikeService.getOne(Wrappers.lambdaQuery(ReplyLike.class).eq(ReplyLike::getReplyId, replyLike.getReplyId())
+                .eq(ReplyLike::getLikerId, replyLike.getLikerId())) == null) {
             LocalDateTime currentDateTime = LocalDateTime.now(ZoneId.of("GMT+8"));
 
             // 将 LocalDateTime 转换为 Date 类型
@@ -73,9 +66,9 @@ public class LikeController extends BaseController {
 
             replyLike.setLikeTime(currentDate);
             replyLikeService.save(replyLike);
-        }else{
-            replyLikeService.remove(Wrappers.lambdaQuery(ReplyLike.class).eq(ReplyLike::getReplyId,replyLike.getReplyId())
-                    .eq(ReplyLike::getLikerId,replyLike.getLikerId()));
+        } else {
+            replyLikeService.remove(Wrappers.lambdaQuery(ReplyLike.class).eq(ReplyLike::getReplyId, replyLike.getReplyId())
+                    .eq(ReplyLike::getLikerId, replyLike.getLikerId()));
         }
         return success();
     }

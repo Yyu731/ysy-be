@@ -1,0 +1,9 @@
+# 项目相关配置
+yxy:
+  # 文件路径 示例（ Windows配置D:/ky/uploadPath，Linux配置 /home/ky/uploadPath）
+  profile: /home/ky/uploadPath
+
+# 开发环境配置
+server:
+  # 服务器的HTTP端口，默认为80
+  port: 5001

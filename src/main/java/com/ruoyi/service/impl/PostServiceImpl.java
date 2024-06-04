@@ -136,8 +136,10 @@ public class PostServiceImpl extends ServiceImpl<PostMapper, Post>
         try {
             LoginUser loginUser = SecurityUtils.getLoginUser();
             detailPostVo.setCollectStatus(collectService.getOne(Wrappers.lambdaQuery(Collect.class)
+                    .eq(Collect::getPostId, post.getPostId())
                     .eq(Collect::getUserId, loginUser.getUserId())) == null ? 0 : 1);
             detailPostVo.setLikeStatus(postLikeService.getOne(Wrappers.lambdaQuery(PostLike.class)
+                    .eq(PostLike::getPostId, post.getPostId())
                     .eq(PostLike::getLikerId, loginUser.getUserId())) == null ? 0 : 1);
         } catch (ServiceException e) {
             detailPostVo.setCollectStatus(0);
@@ -164,11 +166,8 @@ public class PostServiceImpl extends ServiceImpl<PostMapper, Post>
     }
 
     @Override
-    public Page<Post> getPostPage(Page<Post> page, Post post) {
-
-        postMapper.selectPostPage(page, post);
-
-        return page;
+    public List<Post> getPostPage(Long offset, Long size,  Post post) {
+        return postMapper.selectPostPage(offset ,size, post);
     }
 }
 

@@ -13,5 +13,5 @@ import java.util.Map;
  */
 public interface IUserIMServece {
 
-    Map<String, Object> createAccount(Long userId);
+    Map<String, Object> createAccount(String username);
 }

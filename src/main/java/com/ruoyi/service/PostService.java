@@ -19,5 +19,5 @@ public interface PostService extends IService<Post> {
 
     DetailPostVo getDetailPost(Post post);
 
-    Page<Post> getPostPage(Page<Post> page, Post post);
+    List<Post> getPostPage(Long offset, Long size, Post post);
 }

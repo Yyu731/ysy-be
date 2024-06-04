@@ -59,7 +59,7 @@ public class SysLoginController {
         ajax.put(Constants.TOKEN, token);
 
         LoginUser loginUser = SecurityUtils.getLoginUser();
-        Map<String, Object> account = userIMServece.createAccount(loginUser.getUserId());
+        Map<String, Object> account = userIMServece.createAccount(loginUser.getUsername());
         ajax.put("mi", account);
         ajax.put(Constants.TOKEN, token);
         return ajax;
@@ -78,7 +78,7 @@ public class SysLoginController {
         String token = loginService.wxLogin(loginBody.getWxCode());
 
         LoginUser loginUser = SecurityUtils.getLoginUser();
-        Map<String, Object> account = userIMServece.createAccount(loginUser.getUserId());
+        Map<String, Object> account = userIMServece.createAccount(loginUser.getUsername());
         ajax.put("mi", account);
         ajax.put(Constants.TOKEN, token);
         return ajax;
